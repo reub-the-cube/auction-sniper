@@ -1,0 +1,3 @@
+I choose to build my Auction Sniper application using the .NET Multi-platform App UI framework. My personal device is a Windows machine, I have some C# experience and am have a couple of ideas for mobile apps that I've never followed through with so this exercise will give me a good teaser into what it might be like working with .NET MAUI.
+
+I start by [updating my Visual Studio install](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-8.0&tabs=vswin) to include the .NET MAUI workload and initialise [my GitHub repository](https://github.com/reub-the-cube/auction-sniper/).
