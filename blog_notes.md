@@ -1,3 +1,70 @@
-I choose to build my Auction Sniper application using the .NET Multi-platform App UI framework. My personal device is a Windows machine, I have some C# experience and am have a couple of ideas for mobile apps that I've never followed through with so this exercise will give me a good teaser into what it might be like working with .NET MAUI.
+Some intro on why I'm doing this and what I hope to achieve.
 
-I start by [updating my Visual Studio install](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-8.0&tabs=vswin) to include the .NET MAUI workload and initialise [my GitHub repository](https://github.com/reub-the-cube/auction-sniper/).
+## Chapter 9 - Commissioning an Auction Sniper
+I choose to build my Auction Sniper application using the .NET Multi-platform App UI framework in Visual Studio. My personal device is a Windows machine, I have some C# experience and am have a couple of ideas for mobile apps that I've never followed through with so this exercise will give me a good teaser into what it might be like working with .NET MAUI.
+
+I start by [updating my Visual Studio install](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-8.0&tabs=vswin) to include the .NET MAUI workload, then create a new solution with a default .NET MAUI App project and initialise [my GitHub repository](https://github.com/reub-the-cube/auction-sniper/).
+
+I read through - as is often the case with a book - the rest of the chapter, and familiarise myself with the initial deisgn, the sequence of features we want to build, the notes on the XMPP communication layer and the disclaimer about it not being real.
+
+## Chapter 10 - The Walking Skeleton
+
+### Activity 10.1 - Our Very First Test
+
+The book starts with an end-to-end test. I will need a way of checking how the application and the auction are behaving. UI testing tools are a bit lacking, but I plan to start by using Appium with xUnit and follow [this Microsoft devblog](https://devblogs.microsoft.com/dotnet/dotnet-maui-ui-testing-appium/) as a rough guide.
+
+I could follow the book dogmatically and write the test before deciding on my 'end-to-end' tooling, but I'm going to verify I can do that before writing the test. In other words, since I haven't used Appium before, I want to get an _even_ simpler test working so I'm going to work off the blog until the tests pass then revert to the book when I have a working base.
+
+The out-of-the-box project for the App conains more that I need right now. It's an image, a heading, a sub-heading and a button. The button has a click event handler which dynamically updates the button text. The article mentions adding an `AutomationId` attribute but I don't think I need to do that yet and I'm not quite sure what I need to test. But it's good information to have.
+
+I have node on my machine already (v20.15) - but it might be important to remember for any CI - so run `npm i --location=global appium` and install the drivers that are listed in the blog, including the older version (1.2.1) of the WinAppDriver. There's a few module dependencies which are no longer supported which is a bit of a red flag but I also know there aren't a lot of options and this isn't production code.
+
+I start by cloning the [sample project](https://github.com/dotnet/maui-samples/tree/main/8.0/UITesting/BasicAppiumNunitSample) and copy the Shared, Android and Windows projects across to my solution. The tests don't pass. I'm glad I tried it this way first before confusing matter with the actual domain problem.
+
+### A detour for Windows tests
+
+I decide to focus initially on trying to get the Windows tests working, and will refactor to xUnit once I know what's going on a little bit better.
+
+The exceptions I get are of the pattern:
+```
+OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: <An error message>
+```
+
+I didn't keep track of the error messages and the changes at each step but a couple of them were:
+- Package was not found. (Exception from HRESULT: 0x80073CF1)
+- The system cannot find the file specified
+- Failed to locate opened application window with appId: <path_to_app>, and processId: <process_id>
+- Value does not fall within the expected range
+
+I explore various combinations of the `App` property on the `AppiumOptions` object with various properties and settings on the project options and manifest files, try installing and uninstalling the app to my local app store, read around the documentation a bit, experiment with starting the Appium server outside of the test - the Appium drivers and clients are all new to me - but have no luck. Eventually I decide to physically run the app, and then run my tests with various `App` values... and two of the three pass!
+
+The two tests that pass are virtually identical. They just take a screenshot of the app. The failing test cannot find a UI element and that is because I knowingly neglected to add the `AutomationId` attribute. Stick it in, and the test passes.
+
+It still doesn't feel like the project is set up perfectly. I feel like the driver should start the app itself under its own process (since it closes it down). A couple of articles indicate the Windows driver may have trouble starting the app so I was prepared to accept this when I stumbled across the correct syntax for the Application ID. All of the `App` combinations I played with earlier were apparently not exhaustive.
+
+It starts working with `com.companyname.app_<publisher_id>!App`. I had something similar to this from after I had publish the app locally; the next local run I did from the IDE told me I'd be replacing an install. But that application information also included version and device configuration data.
+
+I find the `com.companyname.app` configuration in the MAUI Shared section of the project properties. `<publisher_id>` takes a while but I knew it must have been a part of the publish and I find it hidden away as a read-only field in the Packaging tab of the `.\Platforms\Windows\Package.appxmanifest` file. Searching the solution for my Publisher ID yields no results! I assume that the `!App` part of the Application ID related to the App part of the package.
+
+I adjust the settings, the changes don't seem to take immediate effect so I also re-publish then un-install the old one and run locally from the IDE which seems to resolve some conflicts. Now my Application ID is `com.madetechbookclub.auctionsniper_<publisher_id>!App`, and it all feels quite neat.
+
+
+### A detour for Android tests
+
+
+### Activity 10.1 continued - back to Our Very First Test
+
+It's taken several hours to get here, but is case-in-point for what the book explains as the initial curve to get set up with the Walking Skeleton. Better to do it now (in iteration zero) with minimal dependencies that a few weeks down the line!
+
+
+
+```
+Android Tests
+ OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: WinAppDriver server is not listening within 10000ms timeout. Make sure it could be started manually
+
+Windows Tests
+ OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: Neither ANDROID_HOME nor ANDROID_SDK_ROOT environment variable was exported. Read https://developer.android.com/studio/command-line/variables for more details
+Installed driver version
+ OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: Package was not found. (Exception from HRESULT: 0x80073CF1)
+ ```
+ Might want to delete ANDROID_HOME from system variables. Added and it didn't make a difference.
