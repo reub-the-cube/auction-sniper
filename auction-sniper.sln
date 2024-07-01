@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSniper.App", "AuctionSniper.App\AuctionSniper.App.csproj", "{71DBB697-7844-4313-AB05-42AE9C8F7E2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSniper.App", "AuctionSniper.App\AuctionSniper.App.csproj", "{71DBB697-7844-4313-AB05-42AE9C8F7E2F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Shared", "UITests.Shared\UITests.Shared.csproj", "{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Windows", "UITests.Windows\UITests.Windows.csproj", "{8E839E1A-CF42-4563-9C65-196DBB17F908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +21,14 @@ Global
 		{71DBB697-7844-4313-AB05-42AE9C8F7E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71DBB697-7844-4313-AB05-42AE9C8F7E2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71DBB697-7844-4313-AB05-42AE9C8F7E2F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
