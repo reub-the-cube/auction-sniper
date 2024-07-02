@@ -48,11 +48,15 @@ I find the `com.companyname.app` configuration in the MAUI Shared section of the
 
 I adjust the settings, the changes don't seem to take immediate effect so I also re-publish then un-install the old one and run locally from the IDE which seems to resolve some conflicts. Now my Application ID is `com.madetechbookclub.auctionsniper_<publisher_id>!App`, and it all feels quite neat.
 
+[This](https://github.com/reub-the-cube/auction-sniper/tree/22f1ed324e5f05a8964fc380d8d5eddad9d88c03) is how the repository looks after this step.
+
 ### A detour for Android tests
 
 I check out the error message for the first failing Android test and realised I need the Android SDK. The easiest barrier to entry is to install Android Studio, so that's what I do. Then I set up a device - a Pixel 6. A couple of minor changes to the test (e.g. the package name) and I to deploy the app to my new local device. It works! 
 
 It was a lot less painless than the Windows app but some things had already been ironed out.
+
+[This](https://github.com/reub-the-cube/auction-sniper/tree/3e608382ee4b61044d6839c534b382d09c0ac48b) is how the repository looks after this step.
 
 ### A detour for xUnit
 
@@ -69,8 +73,12 @@ Although the changeset has a fair number of changes, the main changes are:
 - Add the name of the collection to the fixture (where platform-specific code already lived)
 - Add the collection attribute to the `BaseTest` class
 
+[This](https://github.com/reub-the-cube/auction-sniper/tree/7226ebf5a745719c3ef4fd127255c7e33ae8e31f) is how the repository looks after this step.
+
 ### Activity 10.1 continued - back to Our Very First Test
 
 It's taken several hours to get here, but is case-in-point for what the book explains as the initial curve to get set up with the Walking Skeleton. Better to do it now (in iteration zero) with minimal dependencies that a few weeks down the line!
 
+This end-to-end test has an auction that starts, the sniper joins (requested and received), the auction closes and the application shows the sniper lost. This will be a shared test because that should happen on all platforms.
 
+I keep the `AppLaunches` test because it feels like something lightweight may be useful at some point, but remove any other tests and create a new one, which is obviously failing, called `SniperJoinsAuctionUntilAuctionCloses`.

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using OpenQA.Selenium.DevTools.V123.Storage;
 using Xunit;
 
 // You will have to make sure that all the namespaces match
@@ -10,6 +11,8 @@ namespace E2ETests;
 // This is an example of tests that do not need anything platform specific
 public class MainPageTests : BaseTest
 {
+	private FakeAuctionServer auction = new FakeAuctionServer("item-54321");
+
     [Fact]
 	public void AppLaunches()
 	{
@@ -17,18 +20,26 @@ public class MainPageTests : BaseTest
 	}
 
 	[Fact]
-	public async Task ClickCounterTest()
+	public async Task SniperJoinsAuctionUntilAuctionCloses()
 	{
-		// Arrange
-		// Find elements with the value of the AutomationId property
-		var element = FindUIElement("CounterBtn");
+		auction.StartSellingItem();
+		RequestToJoin(auction);
 
-		// Act
+		auction.HasReceivedRequestToJoinFromSniper();
+		auction.AnnounceClosed();
+
+		GetSniperBiddingStatus().Should().Be("Lost");
+	}
+
+	private void RequestToJoin(FakeAuctionServer auction)
+	{
+        var element = FindUIElement("JoinAuction");
 		element.Click();
-		await Task.Delay(500); // Wait for the click to register and show up on the screenshot
+    }
 
-		// Assert
-		App.GetScreenshot().SaveAsFile($"{nameof(ClickCounterTest)}.png");
-		element.Text.Should().Be("Clicked 1 time");
+	private string GetSniperBiddingStatus()
+	{
+		var element = FindUIElement("SniperStatus");
+		return element.Text;
 	}
 }
