@@ -1,7 +1,7 @@
 Some intro on why I'm doing this and what I hope to achieve.
 
 ## Chapter 9 - Commissioning an Auction Sniper
-I choose to build my Auction Sniper application using the .NET Multi-platform App UI framework in Visual Studio. My personal device is a Windows machine, I have some C# experience and am have a couple of ideas for mobile apps that I've never followed through with so this exercise will give me a good teaser into what it might be like working with .NET MAUI.
+I choose to build my Auction Sniper application using the .NET Multi-platform App UI framework in Visual Studio. My personal device is a Windows machine, I have some C# experience and have a couple of ideas for mobile apps that I've never followed through with so this exercise will give me a good teaser into what it might be like working with .NET MAUI.
 
 I start by [updating my Visual Studio install](https://learn.microsoft.com/en-us/dotnet/maui/get-started/installation?view=net-maui-8.0&tabs=vswin) to include the .NET MAUI workload, then create a new solution with a default .NET MAUI App project and initialise [my GitHub repository](https://github.com/reub-the-cube/auction-sniper/).
 
@@ -48,23 +48,14 @@ I find the `com.companyname.app` configuration in the MAUI Shared section of the
 
 I adjust the settings, the changes don't seem to take immediate effect so I also re-publish then un-install the old one and run locally from the IDE which seems to resolve some conflicts. Now my Application ID is `com.madetechbookclub.auctionsniper_<publisher_id>!App`, and it all feels quite neat.
 
-
 ### A detour for Android tests
 
+I check out the error message for the first failing Android test and realised I need the Android SDK. The easiest barrier to entry is to install Android Studio, so that's what I do. Then I set up a device - a Pixel 6. A couple of minor changes to the test (e.g. the package name) and I to deploy the app to my new local device. It works! 
+
+It was a lot less painless than the Windows app but some things had already been ironed out.
 
 ### Activity 10.1 continued - back to Our Very First Test
 
 It's taken several hours to get here, but is case-in-point for what the book explains as the initial curve to get set up with the Walking Skeleton. Better to do it now (in iteration zero) with minimal dependencies that a few weeks down the line!
 
 
-
-```
-Android Tests
- OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: WinAppDriver server is not listening within 10000ms timeout. Make sure it could be started manually
-
-Windows Tests
- OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: Neither ANDROID_HOME nor ANDROID_SDK_ROOT environment variable was exported. Read https://developer.android.com/studio/command-line/variables for more details
-Installed driver version
- OneTimeSetUp: OpenQA.Selenium.WebDriverException : An unknown server-side error occurred while processing the command. Original error: Package was not found. (Exception from HRESULT: 0x80073CF1)
- ```
- Might want to delete ANDROID_HOME from system variables. Added and it didn't make a difference.

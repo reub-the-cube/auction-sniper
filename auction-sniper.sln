@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Shared", "UITests.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Windows", "UITests.Windows\UITests.Windows.csproj", "{8E839E1A-CF42-4563-9C65-196DBB17F908}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Android", "UITests.Android\UITests.Android.csproj", "{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E839E1A-CF42-4563-9C65-196DBB17F908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
