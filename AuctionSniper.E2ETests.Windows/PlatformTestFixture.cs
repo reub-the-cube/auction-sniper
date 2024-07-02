@@ -1,20 +1,17 @@
-﻿using NUnit.Framework;
-
-using OpenQA.Selenium.Appium;
+﻿using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 
 namespace E2ETests;
 
-[SetUpFixture]
-public class AppiumSetup
+public class PlatformTestFixture : IDisposable
 {
 	private static AppiumDriver? driver;
 
 	public static AppiumDriver App => driver ?? throw new NullReferenceException("AppiumDriver is null");
+    public const string TestCollectionName = "Windows test collection";
 
-	[OneTimeSetUp]
-	public void RunBeforeAnyTests()
-	{
+    public PlatformTestFixture()
+    {
         // If you started an Appium server manually, make sure to comment out the next line
         // This line starts a local Appium server for you as part of the test run
         AppiumServerHelper.StartAppiumLocalServer();
@@ -34,12 +31,11 @@ public class AppiumSetup
 		driver = new WindowsDriver(windowsOptions);
 	}
 
-	[OneTimeTearDown]
-	public void RunAfterAnyTests()
-	{
-		driver?.Quit();
+    public void Dispose()
+    {
+        driver?.Quit();
 
-		// If an Appium server was started locally above, make sure we clean it up here
-		AppiumServerHelper.DisposeAppiumLocalServer();
-	}
+        // If an Appium server was started locally above, make sure we clean it up here
+        AppiumServerHelper.DisposeAppiumLocalServer();
+    }
 }

@@ -1,10 +1,10 @@
-using NUnit.Framework;
+using Xunit;
 
 namespace E2ETests;
 
 public class PlatformSpecificSampleTest : BaseTest
 {
-	[Test]
+    [Fact]
 	public void SampleTest()
 	{
 		App.GetScreenshot().SaveAsFile($"{nameof(SampleTest)}.png");

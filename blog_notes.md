@@ -54,6 +54,21 @@ I check out the error message for the first failing Android test and realised I 
 
 It was a lot less painless than the Windows app but some things had already been ironed out.
 
+### A detour for xUnit
+
+I have Windows and Android tests passing (on the OOTB 'click me' project) and am ready to switch from NUnit to xUnit. The frameworks have their differences. Mainly there is no direct equivalent of `[OneTimeSetUp]` which is where the Appium server starts and the drivers are initialised.
+
+I start the refactoring for the simplest test possible with that on the backburner. The `AppiumSetup` class (one per platform) is renamed and tweaked to suit xUnit (constructor and disposal methods vs setup and teardown attributes). 
+
+I then bring the tests back together by making use of the `ICollectionFixture<T>` interface for per-test-collection data. The name of the collection is an attribute on the test class, which can be inherited, and reference a shared property on the platform-specific fixture (what used to be called `AppiumSetup`), so that each dependency is unique per platform and only created once.
+
+Idempotency is important with unit tests especially but as the start-up time for the Appium server / emulators / drivers is slow, it makes sense to just start the app once per suite of platform tests. I can always perform restorative actions on the app later if necessary.
+
+Although the changeset has a fair number of changes, the main changes are:
+- Define a collection definition per platform
+- Add the name of the collection to the fixture (where platform-specific code already lived)
+- Add the collection attribute to the `BaseTest` class
+
 ### Activity 10.1 continued - back to Our Very First Test
 
 It's taken several hours to get here, but is case-in-point for what the book explains as the initial curve to get set up with the Walking Skeleton. Better to do it now (in iteration zero) with minimal dependencies that a few weeks down the line!
