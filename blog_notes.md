@@ -87,9 +87,22 @@ I keep the `AppLaunches` test because it feels like something lightweight may be
 
 ## Chapter 11 - Passing the First Test
 
-Set up Openfire with an embedded database. Set up users, as per the book (but with more secure passwords!).
+### Activity 11.1 - Building the Test Rig
+I kept the infrastructure the same with the idea to use Openfire for the messaging, and I installed it with an embedded database. Set up users, as per the book (but with more secure passwords!).
 
-The Application Runner block controls the application a bit more that I require it to, so I keep the directions in the test class for now.
+The Application Runner code block controls the application a bit more that I require it to, so I keep the app instructions in the test class for now.
 
 The book talks about the minimal implementation, but I prefer to get the code compiling as soon as possible, so cut even more out (knowing, for example, that adding the messaging is still required).
+
+### Activity 11.2 - Fixing the First Failure
+
+```
+OpenQA.Selenium.NoSuchElementException : An element could not be located on the page using the given search parameters.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+```
+This is simple enough. There is no element with the `AutomationId` property of `AuctionId`, as required by the test. This happens two more times because the test also interacts with the 'Join Auction' button, then tries to retrieve the 'Sniper Status' before its first assertion.
+
+```
+Expected SniperBiddingStatus() to be "Joining" with a length of 7, but "" has a length of 0, differs near "" (index 0).
+```
+This is clear too. The status should now be joining, but it's not set. The simplest possible thing to make it pass would be to change the UI to 'Joining' but that's a bit short-sighted because the test will not go green as we're doing the skeleton and expect further changes and assertions against this value.
 
