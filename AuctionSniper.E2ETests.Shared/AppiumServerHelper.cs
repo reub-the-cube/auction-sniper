@@ -1,6 +1,6 @@
 using OpenQA.Selenium.Appium.Service;
 
-namespace UITests;
+namespace E2ETests;
 
 public static class AppiumServerHelper
 {

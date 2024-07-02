@@ -5,11 +5,11 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSniper.App", "AuctionSniper.App\AuctionSniper.App.csproj", "{71DBB697-7844-4313-AB05-42AE9C8F7E2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Shared", "UITests.Shared\UITests.Shared.csproj", "{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSniper.E2ETests.Shared", "AuctionSniper.E2ETests.Shared\AuctionSniper.E2ETests.Shared.csproj", "{8C848CEB-8051-418D-A0C7-ED5FC06EAB5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Windows", "UITests.Windows\UITests.Windows.csproj", "{8E839E1A-CF42-4563-9C65-196DBB17F908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSniper.E2ETests.Windows", "AuctionSniper.E2ETests.Windows\AuctionSniper.E2ETests.Windows.csproj", "{8E839E1A-CF42-4563-9C65-196DBB17F908}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests.Android", "UITests.Android\UITests.Android.csproj", "{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionSniper.E2ETests.Android", "AuctionSniper.E2ETests.Android\AuctionSniper.E2ETests.Android.csproj", "{BE7D1EF8-B5F4-4E07-89FC-EC45AE8AAE6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

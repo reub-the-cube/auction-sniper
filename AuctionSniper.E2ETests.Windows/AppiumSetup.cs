@@ -3,7 +3,7 @@
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 
-namespace UITests;
+namespace E2ETests;
 
 [SetUpFixture]
 public class AppiumSetup

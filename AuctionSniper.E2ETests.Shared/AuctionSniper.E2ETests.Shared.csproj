@@ -4,7 +4,7 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <GenerateMSBuildEditorConfigFile>False</GenerateMSBuildEditorConfigFile>
-    <RootNamespace>UITests</RootNamespace>
+    <RootNamespace>E2ETests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

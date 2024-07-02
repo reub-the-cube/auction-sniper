@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net8.0</TargetFramework>
+	<TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>UITests</RootNamespace>
+	<RootNamespace>E2ETests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Compile Include="..\UITests.Shared\**\*.cs" LinkBase="Shared" Visible="false" />
+    <Compile Include="..\AuctionSniper.E2ETests.Shared\**\*.cs" LinkBase="Shared" Visible="false" />
   </ItemGroup>
 
 </Project>
