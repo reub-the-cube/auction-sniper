@@ -94,7 +94,7 @@ The Application Runner code block controls the application a bit more that I req
 
 The book talks about the minimal implementation, but I prefer to get the code compiling as soon as possible, so cut even more out (knowing, for example, that adding the messaging is still required).
 
-### Activity 11.2 - Fixing the First Failure
+### Activity 11.2 - Fixing the failures
 
 ```
 OpenQA.Selenium.NoSuchElementException : An element could not be located on the page using the given search parameters.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
@@ -106,3 +106,14 @@ Expected SniperBiddingStatus() to be "Joining" with a length of 7, but "" has a 
 ```
 This is clear too. The status should now be joining, but it's not set. The simplest possible thing to make it pass would be to change the UI to 'Joining' but that's a bit short-sighted because the test will not go green as we're doing the skeleton and expect further changes and assertions against this value.
 
+I start by connecting to the XMPP server from the application (aware that in the 'real' flow, the auction will have started selling) because it is the action of sending the join request that will get me closer to green.
+
+I seem to connect magically but then start changing the values and realise it's not connecting correctly. It was because I wasn't awaiting the connection to be opened, so need to run the method asynchronously. Then the validation errors begin, and I can work through them (trusting Openfire certificates, and a password change due to a character I had troubles with).
+
+I get the test passing for Windows, but skip the certificate validation for Android. I then have some strange quirk with `FindElement` on Android not picking up the element, but resolve that after trail and error by moving it out of the layout and then back in again!
+
+I was ready to commit here, but realised my Openfire details were in plaintext. The other examples online have this too, but I want to be more secure about it, so I set up some Application Settings, using [this blog post](https://montemagno.com/dotnet-maui-appsettings-json-configuration/) for inspiration.
+
+```
+Expected SniperBiddingStatus() to be "Lost" with a length of 4, but "Joining" has a length of 7, differs near "Joi" (index 0).
+```

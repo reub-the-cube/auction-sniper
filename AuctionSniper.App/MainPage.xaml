@@ -5,44 +5,40 @@
 
     <ScrollView>
 
-            
-
         <VerticalStackLayout
-                Padding="30,0"
-                Spacing="25">
+            Padding="30,0"
+            Spacing="25">
 
             <Label
                 Text="Auction information"
                 Style="{StaticResource SubHeadline}"
                 SemanticProperties.HeadingLevel="Level2" />
-            
+
             <HorizontalStackLayout
-                    Padding="30,0"
-                    Spacing="25">
+                Padding="30,0"
+                Spacing="25">
 
                 <Label
-                        Text="Auction to join:" />
+                    Text="Auction to join:" />
                 <Entry
-                        Placeholder="Enter an auction id"
-                        AutomationId="AuctionId" />
+                    x:Name="AuctionId"
+                    Placeholder="Enter an auction id"
+                    AutomationId="AuctionId" />
             </HorizontalStackLayout>
 
             <Button
-                    AutomationId="JoinAuction"
-                    Text="Join auction" 
-                    SemanticProperties.Hint="Click this button to join the auction"
-                    Clicked="OnJoinClicked"
-                    HorizontalOptions="Fill" />
+                AutomationId="JoinAuction"
+                Text="Join auction" 
+                SemanticProperties.Hint="Click this button to join the auction"
+                Clicked="OnJoinClicked"
+                HorizontalOptions="Fill" />
+            
+            <Label
+                Text="Sniper bid status:" />
 
-            <HorizontalStackLayout
-                    Padding="30,0"
-                    Spacing="25">
-
-                <Label
-                        Text="Sniper status:" />
-                <Label
-                        AutomationId="SniperStatus" />
-            </HorizontalStackLayout>
+            <Label
+                x:Name="SniperBidStatus"
+                AutomationId="SniperBidStatus" />
         </VerticalStackLayout>
 
     </ScrollView>

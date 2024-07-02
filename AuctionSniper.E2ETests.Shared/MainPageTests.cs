@@ -42,12 +42,12 @@ public class MainPageTests : BaseTest
         var joinAuctionButton = FindUIElement("JoinAuction");
 		joinAuctionButton.Click();
 
-        await Task.Delay(250);
+        await Task.Delay(2000);
     }
 
     private string SniperBiddingStatus()
 	{
-		var element = FindUIElement("SniperStatus");
+		var element = FindUIElement("SniperBidStatus");
 		return element.Text;
 	}
 }

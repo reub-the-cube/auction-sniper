@@ -365,3 +365,5 @@ FodyWeavers.xsd
 # Exclude apps published locally in the root
 /Published
 /openfire_users.txt
+/openfire_identity.pem
+/AuctionSniper.App/appsettings.dev.json

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace AuctionSniper.App
 {
@@ -19,7 +21,34 @@ namespace AuctionSniper.App
     		builder.Logging.AddDebug();
 #endif
 
+            var appConfig = GetAppSettingsConfiguration("AuctionSniper.App.appsettings.json") ?? throw new FileNotFoundException("Could not load app settings.");
+            builder.Configuration.AddConfiguration(appConfig);
+
+            var devConfig = GetAppSettingsConfiguration("AuctionSniper.App.appsettings.dev.json");
+            if (devConfig != null)
+            {
+                builder.Configuration.AddConfiguration(devConfig);
+            }
+
+            builder.Services.AddTransient<MainPage>();
+
             return builder.Build();
+        }
+
+        private static IConfigurationRoot? GetAppSettingsConfiguration(string resourceStreamName)
+        {
+            IConfigurationRoot? appConfig = null;
+            var assembly = Assembly.GetExecutingAssembly();
+
+            using var appSettings = assembly.GetManifestResourceStream(resourceStreamName);
+            if (appSettings != null)
+            {
+                appConfig = new ConfigurationBuilder()
+                            .AddJsonStream(appSettings)
+                            .Build();
+            }
+
+            return appConfig;
         }
     }
 }
