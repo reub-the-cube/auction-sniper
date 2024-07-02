@@ -82,3 +82,14 @@ It's taken several hours to get here, but is case-in-point for what the book exp
 This end-to-end test has an auction that starts, the sniper joins (requested and received), the auction closes and the application shows the sniper lost. This will be a shared test because that should happen on all platforms.
 
 I keep the `AppLaunches` test because it feels like something lightweight may be useful at some point, but remove any other tests and create a new one, which is obviously failing, called `SniperJoinsAuctionUntilAuctionCloses`.
+
+[This](https://github.com/reub-the-cube/auction-sniper/tree/f789ae7246877fb70451740bbd4f3172af829369) is how the repository looks after this step.
+
+## Chapter 11 - Passing the First Test
+
+Set up Openfire with an embedded database. Set up users, as per the book (but with more secure passwords!).
+
+The Application Runner block controls the application a bit more that I require it to, so I keep the directions in the test class for now.
+
+The book talks about the minimal implementation, but I prefer to get the code compiling as soon as possible, so cut even more out (knowing, for example, that adding the messaging is still required).
+

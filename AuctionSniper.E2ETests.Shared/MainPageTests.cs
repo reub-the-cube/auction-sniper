@@ -11,7 +11,9 @@ namespace E2ETests;
 // This is an example of tests that do not need anything platform specific
 public class MainPageTests : BaseTest
 {
-	private FakeAuctionServer auction = new FakeAuctionServer("item-54321");
+	private static readonly string AUCTION_ID = "item-54321";
+
+	private FakeAuctionServer auction = new FakeAuctionServer(AUCTION_ID);
 
     [Fact]
 	public void AppLaunches()
@@ -23,21 +25,27 @@ public class MainPageTests : BaseTest
 	public async Task SniperJoinsAuctionUntilAuctionCloses()
 	{
 		auction.StartSellingItem();
-		RequestToJoin(auction);
+		await StartBiddingIn(auction);
+		SniperBiddingStatus().Should().Be("Joining");
 
 		auction.HasReceivedRequestToJoinFromSniper();
 		auction.AnnounceClosed();
 
-		GetSniperBiddingStatus().Should().Be("Lost");
+		SniperBiddingStatus().Should().Be("Lost");
 	}
 
-	private void RequestToJoin(FakeAuctionServer auction)
+	private async Task StartBiddingIn(FakeAuctionServer auction)
 	{
-        var element = FindUIElement("JoinAuction");
-		element.Click();
+		var auctionIdText = FindUIElement("AuctionId");
+		auctionIdText.SendKeys(auction.AuctionId);
+
+        var joinAuctionButton = FindUIElement("JoinAuction");
+		joinAuctionButton.Click();
+
+        await Task.Delay(250);
     }
 
-	private string GetSniperBiddingStatus()
+    private string SniperBiddingStatus()
 	{
 		var element = FindUIElement("SniperStatus");
 		return element.Text;

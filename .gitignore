@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Exclude apps published locally in the root
 /Published
+/openfire_users.txt
