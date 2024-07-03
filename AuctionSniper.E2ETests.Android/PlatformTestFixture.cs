@@ -4,14 +4,15 @@ using OpenQA.Selenium.Appium.Enums;
 
 namespace E2ETests;
 
-public class PlatformTestFixture : IDisposable
+public class PlatformTestFixture : BaseFixture, IDisposable
 {
 	private static AppiumDriver? driver;
 
 	public static AppiumDriver App => driver ?? throw new NullReferenceException("AppiumDriver is null");
     public const string TestCollectionName = "Android test collection";
+    public const int DefaultDelay = 5000;
 
-    public PlatformTestFixture()
+    public PlatformTestFixture() : base()
     {
 		// If you started an Appium server manually, make sure to comment out the next line
 		// This line starts a local Appium server for you as part of the test run

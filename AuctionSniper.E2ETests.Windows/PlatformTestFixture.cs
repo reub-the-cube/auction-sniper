@@ -3,14 +3,15 @@ using OpenQA.Selenium.Appium.Windows;
 
 namespace E2ETests;
 
-public class PlatformTestFixture : IDisposable
+public class PlatformTestFixture : BaseFixture, IDisposable
 {
 	private static AppiumDriver? driver;
 
 	public static AppiumDriver App => driver ?? throw new NullReferenceException("AppiumDriver is null");
     public const string TestCollectionName = "Windows test collection";
+    public const int DefaultDelay = 500;
 
-    public PlatformTestFixture()
+    public PlatformTestFixture() : base()
     {
         // If you started an Appium server manually, make sure to comment out the next line
         // This line starts a local Appium server for you as part of the test run
@@ -29,7 +30,7 @@ public class PlatformTestFixture : IDisposable
 		// Note there are many more options that you can use to influence the app under test according to your needs
 
 		driver = new WindowsDriver(windowsOptions);
-	}
+    }
 
     public void Dispose()
     {

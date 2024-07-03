@@ -11,4 +11,18 @@
     <Content Include="**\*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="testsettings.dev.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="testsettings.dev.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="testsettings.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

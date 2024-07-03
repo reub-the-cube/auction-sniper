@@ -125,3 +125,5 @@ I was ready to commit here, but realised my Openfire details were in plaintext. 
 Expected SniperBiddingStatus() to be "Lost" with a length of 4, but "Joining" has a length of 7, differs near "Joi" (index 0).
 ```
 This failure needs a bit more thinking but I need the status for the sniper to be 'Lost'. The behaviour I want if for the app to be notified of the auction closing for the item. So I'll need to communicate with the server from the auction server. The auction will need to know that the sniper has joined to do this before notifying subscribers.
+
+I want to start with the auction sending a message that it's closed, since that is what the sniper needs to know. I want to separate my username and password out of the code, so I create a `testsettings.json` and `testsettings.dev.json`. All platforms will need this for the test so it goes in the shared project, and to get the tests to find the resources, they need to be links from each of the platform-specific projects - and copied to the output directory. This also results in the `BaseFixture` class being created to handle platform-agnostic fixture work.

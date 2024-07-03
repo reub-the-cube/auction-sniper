@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /openfire_users.txt
 /openfire_identity.pem
 /AuctionSniper.App/appsettings.dev.json
+/AuctionSniper.E2ETests.Shared/testsettings.dev.json

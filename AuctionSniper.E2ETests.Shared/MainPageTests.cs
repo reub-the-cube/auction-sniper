@@ -13,7 +13,7 @@ public class MainPageTests : BaseTest
 {
 	private static readonly string AUCTION_ID = "item-54321";
 
-	private FakeAuctionServer auction = new FakeAuctionServer(AUCTION_ID);
+    private readonly FakeAuctionServer auction = new(AUCTION_ID);
 
     [Fact]
 	public void AppLaunches()
@@ -37,12 +37,12 @@ public class MainPageTests : BaseTest
 	private async Task StartBiddingIn(FakeAuctionServer auction)
 	{
 		var auctionIdText = FindUIElement("AuctionId");
-		auctionIdText.SendKeys(auction.AuctionId);
+		auctionIdText.SendKeys(auction.ItemId);
 
         var joinAuctionButton = FindUIElement("JoinAuction");
 		joinAuctionButton.Click();
 
-        await Task.Delay(2000);
+        await Task.Delay(PlatformTestFixture.DefaultDelay);
     }
 
     private string SniperBiddingStatus()
