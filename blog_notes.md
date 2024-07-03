@@ -96,11 +96,15 @@ The book talks about the minimal implementation, but I prefer to get the code co
 
 ### Activity 11.2 - Fixing the failures
 
+#### Allow UI elements to be found by the Appium selector
 ```
 OpenQA.Selenium.NoSuchElementException : An element could not be located on the page using the given search parameters.; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
 ```
 This is simple enough. There is no element with the `AutomationId` property of `AuctionId`, as required by the test. This happens two more times because the test also interacts with the 'Join Auction' button, then tries to retrieve the 'Sniper Status' before its first assertion.
 
+[This](https://github.com/reub-the-cube/auction-sniper/tree/177a9e93234e5b9449608d94cb5fe83b69cb91ef) is how the repository looks after this step.
+
+#### Get the sniper to send a join message to the XMPP server
 ```
 Expected SniperBiddingStatus() to be "Joining" with a length of 7, but "" has a length of 0, differs near "" (index 0).
 ```
@@ -114,6 +118,10 @@ I get the test passing for Windows, but skip the certificate validation for Andr
 
 I was ready to commit here, but realised my Openfire details were in plaintext. The other examples online have this too, but I want to be more secure about it, so I set up some Application Settings, using [this blog post](https://montemagno.com/dotnet-maui-appsettings-json-configuration/) for inspiration.
 
+[This](https://github.com/reub-the-cube/auction-sniper/tree/fef2057406ad9a7340bec34347f40d941b339963) is how the repository looks after this step.
+
+#### Get the auction to notify the sniper that the auction has ended
 ```
 Expected SniperBiddingStatus() to be "Lost" with a length of 4, but "Joining" has a length of 7, differs near "Joi" (index 0).
 ```
+This failure needs a bit more thinking but I need the status for the sniper to be 'Lost'. The behaviour I want if for the app to be notified of the auction closing for the item. So I'll need to communicate with the server from the auction server. The auction will need to know that the sniper has joined to do this before notifying subscribers.
