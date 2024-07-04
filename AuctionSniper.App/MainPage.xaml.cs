@@ -45,13 +45,13 @@ namespace AuctionSniper.App
         {
             try
             {
-                MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
+                string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
+                ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
 
-                var xmppConfiguration = configuration.GetSection("Settings:XMPPConfiguration").Get<XMPPConfiguration>() ?? throw new Exception("XMPPConfiguration section of settings file could not be loaded.");
 #if ANDROID
-                await xmppClient.CreateWithLogAsync(xmppConfiguration.SniperUsername, xmppConfiguration.SniperPassword, xmppConfiguration.Server, true, messageListener);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageListener);
 #else
-                await xmppClient.CreateWithLogAsync(xmppConfiguration.SniperUsername, xmppConfiguration.SniperPassword, xmppConfiguration.Server, messageListener);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, messageListener);
 #endif
             }
             catch (Exception ex)
