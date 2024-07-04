@@ -142,4 +142,4 @@ The above reads more clearly to me. Maybe this will change as the chapters unfol
 
 That assertion passes and I have some issues with the UI and threads, so bring in a binding context and view model to handle the update of the status to 'Lost'. It's green, we have our first vertical slice and I might do a bit of tidying up before starting chapter 12.
 
-
+[This](https://github.com/reub-the-cube/auction-sniper/tree/cf6780453e4615dd92549be47ab7ffb9a81005e7) is how the repository looks after this step.
