@@ -124,6 +124,22 @@ I was ready to commit here, but realised my Openfire details were in plaintext. 
 ```
 Expected SniperBiddingStatus() to be "Lost" with a length of 4, but "Joining" has a length of 7, differs near "Joi" (index 0).
 ```
-This failure needs a bit more thinking but I need the status for the sniper to be 'Lost'. The behaviour I want if for the app to be notified of the auction closing for the item. So I'll need to communicate with the server from the auction server. The auction will need to know that the sniper has joined to do this before notifying subscribers.
+This failure needs a bit more thinking but I need the status for the sniper to be 'Lost'. The behaviour I want is for the app to be notified of the auction closing for the item. So I'll need to communicate with the sniper from the auction server. The auction will need to know that the sniper has joined to do this in order to send the notification.
 
 I want to start with the auction sending a message that it's closed, since that is what the sniper needs to know. I want to separate my username and password out of the code, so I create a `testsettings.json` and `testsettings.dev.json`. All platforms will need this for the test so it goes in the shared project, and to get the tests to find the resources, they need to be links from each of the platform-specific projects - and copied to the output directory. This also results in the `BaseFixture` class being created to handle platform-agnostic fixture work.
+
+I really struggled to get the app and the fake auction communicating. I was doubting my understanding of the messaging system so I stripped back everything and created two separate console apps (one as the sniper, and one as the auction item) that connected to the server, and they could send messages to each other. Eventually I realised it was all down to a typo. But I picked up some useful learnings along the way, such as sending the message after binding and that you can't received messages if you don't have the correct presence on the server. 
+
+I am doubting the choice of XMPP client (the `xmppdotnet` NuGet package) as the documentation is lacking but it is the recommended dotnet client on the Openfire site. I also expect that some changes will have happened in the 15 years or so since the authors made the decisions and wrote their code, so naming conventions and features have moved on a bit.
+
+Typo resolved and decisions in the past, I get back to the task in hand and the auction server can receive the sniper's message which declares they're joining the item's auction. I need to handle the message to store the sniper's username, so I can send the message back when the auction closes.
+
+I don't see the value in the naming of `HasReceivedAJoinRequestFromSniper`. The method doesn't do what it says because it doesn't check for a join request specifically, or that it's from sniper. In the real world, the auction wouldn't have an idea of who the send it, so I find this misleading. I think `HasBeenJoined` is a better name for the test, and showing intent to the user. I'm also not a huge fan of assertions outside of the test specifically (although this assertion is done in the framework, in `FakeAuctionServer`). 
+```
+auction.HasBeenJoined().Should().Be(true);
+```
+The above reads more clearly to me. Maybe this will change as the chapters unfold. I regret not changing this earlier and it would have had a different test failure sooner.
+
+That assertion passes and I have some issues with the UI and threads, so bring in a binding context and view model to handle the update of the status to 'Lost'. It's green, we have our first vertical slice and I might do a bit of tidying up before starting chapter 12.
+
+

@@ -9,7 +9,7 @@ public class PlatformTestFixture : BaseFixture, IDisposable
 
 	public static AppiumDriver App => driver ?? throw new NullReferenceException("AppiumDriver is null");
     public const string TestCollectionName = "Windows test collection";
-    public const int DefaultDelay = 500;
+    public const int DefaultDelay = 3000;
 
     public PlatformTestFixture() : base()
     {

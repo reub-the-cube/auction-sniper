@@ -1,7 +1,6 @@
-﻿namespace E2ETests
+﻿namespace AuctionSniper.XMPP
 {
-    // TODO: move this to a XMPP project
-    public class XMPPAccount
+    public class ClientUser
     {
         public string Username { get; set; }
         public string Password { get; set; }

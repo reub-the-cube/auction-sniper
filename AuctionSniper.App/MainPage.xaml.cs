@@ -1,7 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuctionSniper.App.ViewModels;
+using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Reactive.Linq;
 using XmppDotNet;
 using XmppDotNet.Extensions.Client.Message;
+using XmppDotNet.Extensions.Client.Presence;
 using XmppDotNet.Transport.Socket;
+using XmppDotNet.Xmpp;
+using XmppDotNet.Xmpp.Base;
 
 namespace AuctionSniper.App
 {
@@ -20,6 +26,8 @@ namespace AuctionSniper.App
         {
             try
             {
+                MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
+
                 var xmppConfiguration = configuration.GetSection("Settings:XMPPConfiguration").Get<XMPPConfiguration>() ?? throw new Exception("XMPPConfiguration section of settings file could not be loaded.");
 
                 var xmppClient = new XmppClient(
@@ -40,16 +48,31 @@ namespace AuctionSniper.App
 
                 await xmppClient.ConnectAsync();
 
-                string joinMessageBody = "SOLVersion: 1.1; Command: JOIN;";
-                string auctionJid = new Jid($"auction-{AuctionId.Text}");
+                xmppClient
+                    .StateChanged
+                    .Where(s => s == SessionState.Binded)
+                    .Subscribe(async v =>
+                    {
+                        // send our online presence to the server
+                        await xmppClient.SendPresenceAsync(Show.Chat, "free for chat");
 
-                await xmppClient.SendChatMessageAsync(auctionJid, joinMessageBody);
+                        // send a join message to the user for the auction's item
+                        string joinMessageBody = "SOLVersion: 1.1; Command: JOIN;";
+                        await xmppClient.SendChatMessageAsync($"auction-{ItemId.Text}@{xmppConfiguration.Server}", joinMessageBody);
+                        bindingContext.SniperBidStatus = "Joining";
+                    });
 
-                SniperBidStatus.Text = "Joining";
+                xmppClient
+                    .XmppXElementReceived
+                    .Where(el => el is Message)
+                    .Subscribe(el =>
+                    {
+                        // Assume it's a close message from the auction for now.
+                        bindingContext.SniperBidStatus = "Lost";
+                    });
             }
             catch (Exception ex)
             {
-                SniperBidStatus.Text = ex.ToString();
                 Console.WriteLine(ex.ToString());
             }
         }

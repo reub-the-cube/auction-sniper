@@ -1,6 +1,9 @@
 {
-  "auction-item-54321": {
-    "Username": "<set-this-in-your-testsettings.dev.json-file>",
-    "Password": "<set-this-in-your-testsettings.dev.json-file>"
+  "xmppSettings": {
+    "server": "<set-this-in-your-testsettings.dev.json-file>",
+    "auction-item-54321": {
+      "username": "<set-this-in-your-testsettings.dev.json-file>",
+      "password": "<set-this-in-your-testsettings.dev.json-file>"
+    }
   }
 }

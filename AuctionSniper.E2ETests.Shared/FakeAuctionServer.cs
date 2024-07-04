@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuctionSniper.XMPP;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using XmppDotNet;
 
 namespace E2ETests
 {
@@ -6,6 +9,9 @@ namespace E2ETests
     {
         private readonly string auctionId;
         private readonly string itemId;
+        private readonly MessageListener messageListener = new();
+        private readonly Client xmppClient;
+
         public string AuctionId => auctionId;
         public string ItemId => itemId;
 
@@ -13,22 +19,30 @@ namespace E2ETests
         {
             auctionId = $"auction-{itemId}";
             this.itemId = itemId;
+
+            xmppClient = BaseFixture.ServiceProvider.GetRequiredService<Client>();
         }
 
-        public void StartSellingItem()
+        public async Task StartSellingItem()
         {
+            ClientUser auctionItemUser = BaseFixture.Configuration.GetSection($"xmppSettings:{auctionId}").Get<ClientUser>() ?? throw new Exception($"Section with name xmppSettings:{auctionId} of test settings file could not be loaded.");
+            string xmppServer = BaseFixture.Configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception($"Section with name xmppSettings:server of test settings file could not be loaded.");
 
+            await xmppClient.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, messageListener);
         }
 
-        public void HasReceivedRequestToJoinFromSniper()
+        public bool HasBeenJoined()
         {
-
+            return messageListener.HasReceivedJoinMessage();
         }
 
-        public void AnnounceClosed()
+        public async Task AnnounceClosed()
         {
-            XMPPAccount auctionItemUser = BaseFixture.Configuration.GetSection($"{auctionId}").Get<XMPPAccount>() ?? throw new Exception($"Section with name {auctionId} of test settings file could not be loaded.");
-            Console.WriteLine($"{auctionItemUser.Username}| {auctionItemUser.Password}");
+            string username = messageListener.SenderOfFirstJoinMessage();
+            Jid to = xmppClient.CreateJidFromLocalUsername(username);
+
+            // Send close message to whoever joined.
+            await xmppClient.SendMessageAsync(to, SouthabeeStandards.CLOSE_REQUEST);
         }
     }
 }

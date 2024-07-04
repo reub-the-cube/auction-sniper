@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using OpenQA.Selenium.DevTools.V123.Storage;
 using Xunit;
 
 // You will have to make sure that all the namespaces match
@@ -24,19 +23,27 @@ public class MainPageTests : BaseTest
 	[Fact]
 	public async Task SniperJoinsAuctionUntilAuctionCloses()
 	{
-		auction.StartSellingItem();
+		// Act
+		await auction.StartSellingItem();
+
+		// Act
 		await StartBiddingIn(auction);
+
+		// Assert
 		SniperBiddingStatus().Should().Be("Joining");
+		auction.HasBeenJoined().Should().Be(true);
 
-		auction.HasReceivedRequestToJoinFromSniper();
-		auction.AnnounceClosed();
+		// Act
+		await auction.AnnounceClosed();
 
+		// Assert
+		await Task.Delay(PlatformTestFixture.DefaultDelay);
 		SniperBiddingStatus().Should().Be("Lost");
 	}
 
 	private async Task StartBiddingIn(FakeAuctionServer auction)
 	{
-		var auctionIdText = FindUIElement("AuctionId");
+		var auctionIdText = FindUIElement("ItemId");
 		auctionIdText.SendKeys(auction.ItemId);
 
         var joinAuctionButton = FindUIElement("JoinAuction");

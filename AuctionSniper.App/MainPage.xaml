@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AuctionSniper.App.ViewModels"
              x:Class="AuctionSniper.App.MainPage">
-
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+    
     <ScrollView>
 
         <VerticalStackLayout
@@ -21,9 +25,9 @@
                 <Label
                     Text="Auction to join:" />
                 <Entry
-                    x:Name="AuctionId"
-                    Placeholder="Enter an auction id"
-                    AutomationId="AuctionId" />
+                    x:Name="ItemId"
+                    Placeholder="Enter an item id"
+                    AutomationId="ItemId" />
             </HorizontalStackLayout>
 
             <Button
@@ -32,11 +36,12 @@
                 SemanticProperties.Hint="Click this button to join the auction"
                 Clicked="OnJoinClicked"
                 HorizontalOptions="Fill" />
-            
+
             <Label
                 Text="Sniper bid status:" />
 
             <Label
+                Text="{Binding SniperBidStatus}"
                 x:Name="SniperBidStatus"
                 AutomationId="SniperBidStatus" />
         </VerticalStackLayout>
