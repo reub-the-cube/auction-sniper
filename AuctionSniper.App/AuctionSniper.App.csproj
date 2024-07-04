@@ -132,4 +132,8 @@
 		<PackageReference Include="XmppDotNet.Transport.WebSocket" Version="3.2.4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\AuctionSniper.XMPP\AuctionSniper.XMPP.csproj" />
+	</ItemGroup>
+
 </Project>

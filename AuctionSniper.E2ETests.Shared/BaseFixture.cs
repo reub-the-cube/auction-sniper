@@ -23,7 +23,6 @@ namespace E2ETests
             serviceProvider = new ServiceCollection()
                 .AddLogging(builder => builder.AddDebug())
                 .AddSingleton<Client>()
-                .AddScoped<MessageListener>()
                 .BuildServiceProvider();
         }
     }

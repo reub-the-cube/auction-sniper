@@ -1,28 +1,42 @@
 ﻿using DnsClient.Internal;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using XmppDotNet;
-using XmppDotNet.Extensions.Client.Disco;
 using XmppDotNet.Extensions.Client.Message;
 using XmppDotNet.Extensions.Client.Presence;
-using XmppDotNet.Extensions.Client.Roster;
 using XmppDotNet.Transport.Socket;
 using XmppDotNet.Xmpp;
 using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.XMPP
 {
-    public class Client(ILogger<Client> logger)
+    public class Client
     {
+        public event EventHandler ClientHasBinded;
+
+        private readonly ILogger<Client> logger;
         private XmppClient? xmppClient;
 
-        public async Task CreateWithLogAsync(string username, string password, string server, MessageListener messageListener)
+        public Client(ILogger<Client> logger)
+        {
+            this.logger = logger;
+
+            ClientHasBinded = delegate { };
+        }
+
+        public async Task CreateWithLogAsync(string username, string password, string server, bool acceptAllCertificates, MessageListener messageListener)
         {
             xmppClient = new XmppClient(
                 conf =>
                 {
-                    conf.UseSocketTransport();
+                    if (acceptAllCertificates)
+                    {
+                        conf.UseSocketTransport().WithCertificateValidator(new AlwaysAcceptCertificateValidator());
+                    }
+                    else
+                    {
+                        conf.UseSocketTransport();
+                    }
                     conf.AutoReconnect = true;
                 }
             )
@@ -45,7 +59,7 @@ namespace AuctionSniper.XMPP
                 {
                     // handle the message here
                     logger.LogInformation(el.ToString());
-                    messageListener.ProcessMessage((Message)el);
+                    messageListener.ProcessMessage(this, (Message)el);
                 });
 
             xmppClient
@@ -53,13 +67,16 @@ namespace AuctionSniper.XMPP
                 .Where(s => s == SessionState.Binded)
                 .Subscribe(async ss =>
                 {
-                    //var roster = await xmppClient.RequestRosterAsync();
                     logger.LogInformation(ss.ToString());
-
                     await xmppClient.SendPresenceAsync(Show.Chat, "free for chat");
+                    ClientHasBinded.Invoke(this, EventArgs.Empty);
                 });
 
             await xmppClient.ConnectAsync();
+        }
+        public async Task CreateWithLogAsync(string username, string password, string server, MessageListener messageListener)
+        {
+            await CreateWithLogAsync(username, password, server, false, messageListener);
         }
 
         public Jid CreateJidFromLocalUsername(string username)

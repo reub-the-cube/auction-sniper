@@ -30,7 +30,9 @@ namespace AuctionSniper.App
                 builder.Configuration.AddConfiguration(devConfig);
             }
 
-            builder.Services.AddTransient<MainPage>();
+            builder.Services
+                .AddTransient<MainPage>()
+                .AddSingleton<XMPP.Client>();
 
             return builder.Build();
         }
