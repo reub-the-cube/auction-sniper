@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Xunit;
 
 // You will have to make sure that all the namespaces match
@@ -30,15 +30,15 @@ public class MainPageTests : BaseTest
 		await StartBiddingIn(auction);
 
 		// Assert
-		SniperBiddingStatus().Should().Be("Joining");
-		auction.HasBeenJoined().Should().Be(true);
+		SniperBiddingStatus().ShouldBe("Joining");
+		auction.HasBeenJoined().ShouldBe(true);
 
 		// Act
 		await auction.AnnounceClosed();
 
 		// Assert
 		await Task.Delay(PlatformTestFixture.DefaultDelay);
-		SniperBiddingStatus().Should().Be("Lost");
+		SniperBiddingStatus().ShouldBe("Lost");
 	}
 
 	private async Task StartBiddingIn(FakeAuctionServer auction)
