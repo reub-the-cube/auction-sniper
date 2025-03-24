@@ -36,13 +36,28 @@ namespace E2ETests
             return messageListener.HasReceivedJoinMessage();
         }
 
+        public bool HasReceivedBid(int bid, string bidder)
+        {
+            string message = string.Format(SouthabeeStandards.BID_REQUEST, bid);
+            return messageListener.HasReceivedBidMessageFrom(message, bidder);
+        }
+
         public async Task AnnounceClosed()
         {
             string username = messageListener.SenderOfFirstJoinMessage();
             Jid to = xmppClient.CreateJidFromLocalUsername(username);
 
-            // Send close message to whoever joined.
+            // Send close message to first person that joined.
             await xmppClient.SendMessageAsync(to, SouthabeeStandards.CLOSE_REQUEST);
+        }
+
+        public async Task ReportPrice(int price, int increment, string bidder)
+        {
+            string username = messageListener.SenderOfFirstJoinMessage();
+            Jid to = xmppClient.CreateJidFromLocalUsername(username);
+
+            // Send price notification
+            await xmppClient.SendMessageAsync(to, string.Format(SouthabeeStandards.REPORT_PRICE_EVENT, price, increment, bidder));
         }
     }
 }

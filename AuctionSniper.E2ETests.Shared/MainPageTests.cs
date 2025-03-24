@@ -1,4 +1,6 @@
-﻿using Shouldly;
+﻿using AuctionSniper.XMPP;
+using Microsoft.Extensions.Configuration;
+using Shouldly;
 using Xunit;
 
 // You will have to make sure that all the namespaces match
@@ -40,6 +42,34 @@ public class MainPageTests : BaseTest
 		await Task.Delay(PlatformTestFixture.DefaultDelay);
 		SniperBiddingStatus().ShouldBe("Lost");
 	}
+
+	[Fact]
+	public async Task SniperMakesAHigherBidButLoses()
+	{
+        // Act
+        await auction.StartSellingItem();
+
+        // Act
+        await StartBiddingIn(auction);
+
+		// Assert
+        auction.HasBeenJoined().ShouldBe(true);
+
+		// Act
+		await auction.ReportPrice(1000, 98, "other bidder");
+        SniperBiddingStatus().ShouldBe("Bidding");
+
+        // Assert
+        ClientUser sniperUser = BaseFixture.Configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
+        auction.HasReceivedBid(1098, sniperUser.Username);
+
+        // Act
+        await auction.AnnounceClosed();
+
+        // Assert
+        await Task.Delay(PlatformTestFixture.DefaultDelay);
+        SniperBiddingStatus().ShouldBe("Lost");
+    }
 
 	private async Task StartBiddingIn(FakeAuctionServer auction)
 	{

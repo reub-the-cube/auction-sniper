@@ -6,6 +6,7 @@ namespace AuctionSniper.XMPP
     {
         public event EventHandler CloseMessageReceived;
 
+        private List<Message> bidMessages = [];
         private List<Message> joinMessages = [];
 
         public MessageListener()
@@ -23,6 +24,17 @@ namespace AuctionSniper.XMPP
             {
                 CloseMessageReceived?.Invoke(sender, EventArgs.Empty);
             }
+            else if (SouthabeeStandards.IsBidCommand(message.Body))
+            {
+                bidMessages.Add(message);
+            }
+        }
+
+        public bool HasReceivedBidMessageFrom(string message, string from)
+        {
+            return bidMessages
+                .Where(m => m.From.Local == from && m.Body == message)
+                .Any();
         }
 
         public bool HasReceivedJoinMessage()
