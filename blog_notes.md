@@ -134,7 +134,7 @@ I am doubting the choice of XMPP client (the `xmppdotnet` NuGet package) as the 
 
 Typo resolved and decisions in the past, I get back to the task in hand and the auction server can receive the sniper's message which declares they're joining the item's auction. I need to handle the message to store the sniper's username, so I can send the message back when the auction closes.
 
-I don't see the value in the naming of `HasReceivedAJoinRequestFromSniper`. The method doesn't do what it says because it doesn't check for a join request specifically, or that it's from sniper. In the real world, the auction wouldn't have an idea of who the send it, so I find this misleading. I think `HasBeenJoined` is a better name for the test, and showing intent to the user. I'm also not a huge fan of assertions outside of the test specifically (although this assertion is done in the framework, in `FakeAuctionServer`). 
+I don't see the value in the naming of `HasReceivedAJoinRequestFromSniper`. The method doesn't do what it says because it doesn't check for a join request specifically, or that it's from sniper, so I find this misleading. I think `HasBeenJoined` is a better name for the test, and showing intent to the user. I'm also not a huge fan of assertions outside of the test specifically (although this assertion is done in the framework, in `FakeAuctionServer`). 
 ```
 auction.HasBeenJoined().Should().Be(true);
 ```
@@ -143,3 +143,37 @@ The above reads more clearly to me. Maybe this will change as the chapters unfol
 That assertion passes and I have some issues with the UI and threads, so bring in a binding context and view model to handle the update of the status to 'Lost'. It's green, we have our first vertical slice and I might do a bit of tidying up before starting chapter 12.
 
 [This](https://github.com/reub-the-cube/auction-sniper/tree/cf6780453e4615dd92549be47ab7ffb9a81005e7) is how the repository looks after this step.
+
+### Reflecting on Passing the First Test
+I look back over the code and review the differences I have locally to the book in Chapter 11. 
+
+|Difference|In the book|In my repo|Impact|
+|---|---|---|---|
+|Starting the application|The book runs that application, initialising it with the sniper's, XMPP server and `itemId` details.|I run the application, load the sniper's and XMPP server details and type the `itemId` through the UI.|I don't think my implementation is 'different' but it is slightly more complex. It was probably due to the default project containing some `xaml` markup ready to go.|
+|Driver and WindowLicker|The book has a prober to check on the on-screen components|I have a fixed delay per platform, but can't repeat the check|My version may be a bit more brittle as it'll only check once, but behviourally the app is the same.|
+|Fake auction initialisation|The book's Smack client is different from the Xmppdotnet client, and has different APIs. It logs in and has a chat listener and a message listener.|I have a message listener for the user receiving a new `Message`.|I might be missing a trick with something in the library the manages 'group' chats, but it'll flush out later.|
+|Message listener|The book uses a blocking queue and just receives one message of any type|I receive multiple messages and treat them differently, and I have the same listener for the auction and the sniper.|I know if there's been specifically a join request. I have extra logic because of the shared message listener.|
+|Sniper receiving message|The book uses the Swing utility `invokeLater` which uses some Java magic to run on the AWT event dispatch thread.|I am using the event listener as mentioned above, and checking for specific message data. I am not just setting the status to 'lost' when any message is received.
+
+I think using a shared message listener might have been too far. Perhaps it'll need separating. The message listener has code added for the auction and the sniper, which is merged together but the handling of both is actually unique.
+
+## Chapter 12 - Getting Ready to Bid
+
+### Activity 12.1 - A Test for Bidding
+
+The next part of the behaviour is the sniper bidding. It took me a couple of reads to get that bidding does not mean the sniper has made a bid, but that the auction has reported a bid (see page 78). However, the test asserts that the sniper sends a higher bid but still loses. For me, this isn't an acceptance test of much value because it's not a real journey for the sniper.
+
+With the scaffolding in place adding the next acceptance test is much simpler to get into place. The first thing that I notice is the different approach for the auction asserting against the messages received.
+```
+auction.HasReceivedBid(1098, sniperUser.Username);
+```
+Unlike in the previous chapter, with the `HasReceivedJoinRequestFromSniper` method, which didn't pass any arguments through, this is specifically checking the content of the bid message and who it's from. The book remarks on this difference as I did above, and I will go back to assert that the join message is from the sniper when I'm next green.
+
+They also choose to extract the message formats, which is a step I started to take in the first chapter to remove my duplication early.
+
+The test fails for the expected reason as the implementation isn't written yet.
+```
+SniperBiddingStatus() should be "Bidding" but was "Joining"
+```
+
+### Activity 12.2 - The AuctionMessageTranslator
