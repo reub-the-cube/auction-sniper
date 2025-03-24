@@ -41,7 +41,7 @@
                 Text="Sniper bid status:" />
 
             <Label
-                Text="{Binding SniperBidStatus}"
+                Text="{Binding x:DataType=local:MainPageViewModel, Path=SniperBidStatus}"
                 x:Name="SniperBidStatus"
                 AutomationId="SniperBidStatus" />
         </VerticalStackLayout>

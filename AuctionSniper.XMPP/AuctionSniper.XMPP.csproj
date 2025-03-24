@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
     <PackageReference Include="XmppDotNet" Version="3.2.4" />
     <PackageReference Include="XmppDotNet.Extensions" Version="3.2.4" />
     <PackageReference Include="XmppDotNet.Transport.Socket" Version="3.2.4" />
