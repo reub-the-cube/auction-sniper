@@ -74,6 +74,7 @@ public class MainPageTests : BaseTest
 	private async Task StartBiddingIn(FakeAuctionServer auction)
 	{
 		var auctionIdText = FindUIElement("ItemId");
+		auctionIdText.Clear();
 		auctionIdText.SendKeys(auction.ItemId);
 
         var joinAuctionButton = FindUIElement("JoinAuction");

@@ -4,8 +4,8 @@ namespace AuctionSniper.App.ViewModels
 {
     public class MainPageViewModel : ViewModelBase, IAuctionEventListener
     {
-        string sniperBidStatus;
-        public string SniperBidStatus
+        private string? sniperBidStatus;
+        public string? SniperBidStatus
         {
             get { return sniperBidStatus; }
             set

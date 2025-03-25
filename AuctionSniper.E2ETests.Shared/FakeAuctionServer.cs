@@ -9,7 +9,7 @@ namespace E2ETests
     {
         private readonly string auctionId;
         private readonly string itemId;
-        private readonly MessageListener messageListener = new();
+        private readonly AuctionHouseTranslator messageListener = new();
         private readonly Client xmppClient;
 
         public string AuctionId => auctionId;
@@ -28,7 +28,7 @@ namespace E2ETests
             ClientUser auctionItemUser = BaseFixture.Configuration.GetSection($"xmppSettings:{auctionId}").Get<ClientUser>() ?? throw new Exception($"Section with name xmppSettings:{auctionId} of test settings file could not be loaded.");
             string xmppServer = BaseFixture.Configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception($"Section with name xmppSettings:server of test settings file could not be loaded.");
 
-            await xmppClient.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, messageListener, null);
+            await xmppClient.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, messageListener);
         }
 
         public bool HasBeenJoined()

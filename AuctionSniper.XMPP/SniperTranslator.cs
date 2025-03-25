@@ -2,7 +2,7 @@
 
 namespace AuctionSniper.XMPP
 {
-    public class MessageTranslator(IAuctionEventListener auctionEventListener)
+    public class SniperTranslator(IAuctionEventListener auctionEventListener) : IMessageTranslator
     {
         private readonly IAuctionEventListener _auctionEventListener = auctionEventListener;
 

@@ -22,7 +22,7 @@ ClientUser auctionItemUser = GetUserProfile();
 string xmppServer = GetXmppServer();
 string recipientUsername = GetRecipientUsername();
 
-await clientService.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, new MessageListener(), null);
+await clientService.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, new AuctionHouseTranslator());
 
 var nextAction = Console.ReadLine();
 await HandleActionAsync(nextAction);

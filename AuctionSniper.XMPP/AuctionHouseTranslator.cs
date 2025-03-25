@@ -2,27 +2,16 @@
 
 namespace AuctionSniper.XMPP
 {
-    public class MessageListener
+    public class AuctionHouseTranslator : IMessageTranslator
     {
-        public event EventHandler CloseMessageReceived;
-
         private List<Message> bidMessages = [];
         private List<Message> joinMessages = [];
 
-        public MessageListener()
-        {
-            CloseMessageReceived = delegate { };
-        }
-
-        public void ProcessMessage(object? sender, Message message)
+        public void ProcessMessage(Message message)
         {
             if (message.Body.Equals(SouthabeeStandards.JOIN_REQUEST))
             {
                 joinMessages.Add(message);
-            }
-            else if (message.Body.Equals(SouthabeeStandards.CLOSE_REQUEST))
-            {
-                CloseMessageReceived?.Invoke(sender, EventArgs.Empty);
             }
             else if (SouthabeeStandards.IsBidCommand(message.Body))
             {

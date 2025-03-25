@@ -24,7 +24,7 @@ namespace AuctionSniper.XMPP
             ClientHasBinded = delegate { };
         }
 
-        public async Task CreateWithLogAsync(string username, string password, string server, bool acceptAllCertificates, MessageListener messageListener, MessageTranslator? messageTranslator)
+        public async Task CreateWithLogAsync(string username, string password, string server, bool acceptAllCertificates, IMessageTranslator messageTranslator)
         {
             xmppClient = new XmppClient(
                 conf =>
@@ -49,7 +49,7 @@ namespace AuctionSniper.XMPP
                 .Subscribe(ss =>
                 {
                     // handle the message here
-                    logger.LogInformation(ss.ToString());
+                    logger.LogInformation("{Element}", ss.ToString());
                 });
 
             xmppClient
@@ -58,8 +58,7 @@ namespace AuctionSniper.XMPP
                 .Subscribe(el =>
                 {
                     // handle the message here
-                    logger.LogInformation(el.ToString());
-                    messageListener.ProcessMessage(this, (Message)el);
+                    logger.LogInformation("{Element}", el.ToString());
                     messageTranslator?.ProcessMessage((Message)el);
                 });
 
@@ -68,16 +67,16 @@ namespace AuctionSniper.XMPP
                 .Where(s => s == SessionState.Binded)
                 .Subscribe(async ss =>
                 {
-                    logger.LogInformation(ss.ToString());
+                    logger.LogInformation("{Element}", ss.ToString());
                     await xmppClient.SendPresenceAsync(Show.Chat, "free for chat");
                     ClientHasBinded.Invoke(this, EventArgs.Empty);
                 });
 
             await xmppClient.ConnectAsync();
         }
-        public async Task CreateWithLogAsync(string username, string password, string server, MessageListener messageListener, MessageTranslator? messageTranslator)
+        public async Task CreateWithLogAsync(string username, string password, string server, IMessageTranslator messageTranslator)
         {
-            await CreateWithLogAsync(username, password, server, false, messageListener, messageTranslator);
+            await CreateWithLogAsync(username, password, server, false, messageTranslator);
         }
 
         public Jid CreateJidFromLocalUsername(string username)

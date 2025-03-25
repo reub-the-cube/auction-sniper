@@ -8,8 +8,7 @@ namespace AuctionSniper.App
     public partial class MainPage : ContentPage
     {
         private readonly IConfiguration configuration;
-        private readonly MessageListener messageListener = new();
-        private MessageTranslator? messageTranslator;
+        private SniperTranslator? messageTranslator;
         private readonly Client xmppClient;
 
         public MainPage(IConfiguration configuration, IServiceProvider serviceProvider)
@@ -19,16 +18,7 @@ namespace AuctionSniper.App
             this.configuration = configuration;
             xmppClient = serviceProvider.GetRequiredService<Client>();
 
-            //messageListener.CloseMessageReceived += MessageListener_CloseMessageReceived;
             xmppClient.ClientHasBinded += XmppClient_ClientHasBinded;
-        }
-
-        private void MessageListener_CloseMessageReceived(object? sender, EventArgs e)
-        {
-            MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
-
-            // Assume it's a close message from the auction for now.
-            bindingContext.SniperBidStatus = "Lost";
         }
 
         private void XmppClient_ClientHasBinded(object? sender, EventArgs e)
@@ -46,15 +36,15 @@ namespace AuctionSniper.App
         {
             try
             {
-                messageTranslator = new MessageTranslator((MainPageViewModel)BindingContext);
+                messageTranslator = new SniperTranslator((MainPageViewModel)BindingContext);
 
                 string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
                 ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
 
 #if ANDROID
-                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageListener, messageTranslator);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageTranslator);
 #else
-                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, messageListener, messageTranslator);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, messageTranslator);
 #endif
             }
             catch (Exception ex)
