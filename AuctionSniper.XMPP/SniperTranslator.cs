@@ -19,7 +19,9 @@ namespace AuctionSniper.XMPP
                     _auctionEventListener.AuctionClosed();
                     break;
                 case "PRICE":
-                    _auctionEventListener.CurrentPrice(192, 7);
+                    int currentPrice = int.Parse(elements["CurrentPrice"]);
+                    int increment = int.Parse(elements["Increment"]);
+                    _auctionEventListener.CurrentPrice(currentPrice, increment);
                     break;
             }
         }
