@@ -5,7 +5,7 @@ using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.UnitTests
 {
-    public class MessageTranslatorTests
+    public class SniperTranslatorTests
     {
         [Fact]
         public void NotifiesAuctionClosedWhenCloseMessageReceived()
