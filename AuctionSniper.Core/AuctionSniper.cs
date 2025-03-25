@@ -2,7 +2,7 @@
 
 namespace AuctionSniper.Core
 {
-    public class AuctionSniper(SniperListener sniperListener): IAuctionEventListener
+    public class AuctionSniper(Auction auction, SniperListener sniperListener): IAuctionEventListener
     {
         public void AuctionClosed()
         {
@@ -11,7 +11,8 @@ namespace AuctionSniper.Core
 
         public void CurrentPrice(int price, int increment)
         {
-            throw new NotImplementedException();
+            auction.Bid(price + increment);
+            sniperListener.SniperBidding();
         }
     }
 }
