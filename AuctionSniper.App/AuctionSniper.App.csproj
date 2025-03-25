@@ -133,6 +133,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\AuctionSniper.Core\AuctionSniper.Core.csproj" />
 	  <ProjectReference Include="..\AuctionSniper.XMPP\AuctionSniper.XMPP.csproj" />
 	</ItemGroup>
 

@@ -1,8 +1,8 @@
-﻿using AuctionSniper.XMPP;
+﻿using AuctionSniper.Core;
 
 namespace AuctionSniper.App.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase, IAuctionEventListener
+    public class MainPageViewModel : ViewModelBase, SniperListener
     {
         private string? sniperBidStatus;
         public string? SniperBidStatus
@@ -18,14 +18,9 @@ namespace AuctionSniper.App.ViewModels
             }
         }
 
-        public void AuctionClosed()
+        public void SniperLost()
         {
             SniperBidStatus = "Lost";
-        }
-
-        public void CurrentPrice(int price, int increment)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuctionSniper.Core\AuctionSniper.Core.csproj" />
     <ProjectReference Include="..\AuctionSniper.SniperHarness\AuctionSniper.SniperHarness.csproj" />
   </ItemGroup>
 

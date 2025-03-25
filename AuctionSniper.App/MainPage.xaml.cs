@@ -36,7 +36,7 @@ namespace AuctionSniper.App
         {
             try
             {
-                messageTranslator = new SniperTranslator((MainPageViewModel)BindingContext);
+                messageTranslator = new SniperTranslator(new Core.AuctionSniper((MainPageViewModel)BindingContext));
 
                 string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
                 ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");

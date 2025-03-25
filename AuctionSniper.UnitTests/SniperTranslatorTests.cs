@@ -1,6 +1,5 @@
 ﻿using AuctionSniper.XMPP;
 using Moq;
-using Shouldly;
 using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.UnitTests
