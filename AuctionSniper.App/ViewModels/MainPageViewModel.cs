@@ -18,6 +18,11 @@ namespace AuctionSniper.App.ViewModels
             }
         }
 
+        public void SniperBidding()
+        {
+            SniperBidStatus = "Bidding";
+        }
+
         public void SniperLost()
         {
             SniperBidStatus = "Lost";

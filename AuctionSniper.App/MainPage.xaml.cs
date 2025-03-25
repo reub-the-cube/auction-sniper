@@ -36,7 +36,7 @@ namespace AuctionSniper.App
         {
             try
             {
-                messageTranslator = new SniperTranslator(new Core.AuctionSniper((MainPageViewModel)BindingContext));
+                messageTranslator = new SniperTranslator(new Core.AuctionSniper(new Auction(xmppClient), (MainPageViewModel)BindingContext));
 
                 string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
                 ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
@@ -51,6 +51,14 @@ namespace AuctionSniper.App
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+    }
+
+    public class Auction(Client xmppClient) : Core.Auction
+    {
+        public async Task Bid(int amount)
+        {
+            await xmppClient.SendMessageAsync(null, string.Format(SouthabeeStandards.BID_REQUEST, amount));
         }
     }
 }

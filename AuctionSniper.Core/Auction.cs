@@ -2,6 +2,6 @@
 {
     public interface Auction
     {
-        void Bid(int amount);
+        Task Bid(int amount);
     }
 }

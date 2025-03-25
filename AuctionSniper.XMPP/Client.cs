@@ -44,7 +44,7 @@ namespace AuctionSniper.XMPP
                 Jid = $"{username}@{server}",
                 Password = $"{password}"
             };
-
+            
             xmppClient.StateChanged
                 .Subscribe(ss =>
                 {
