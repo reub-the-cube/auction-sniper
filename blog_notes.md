@@ -176,4 +176,18 @@ The test fails for the expected reason as the implementation isn't written yet.
 SniperBiddingStatus() should be "Bidding" but was "Joining"
 ```
 
+[This](https://github.com/reub-the-cube/auction-sniper/commit/35567a38fe01566ea186ce0296fe2e3cd19131c8) is how the repository looks after this step.
+
 ### Activity 12.2 - The AuctionMessageTranslator
+
+In order to get my working skeleton, I've already introduced the concept of the translator (which is the MessageListener class), which inteprets the messages from the chat and sends the close message via an event to the UI. This section builds on the idea, and gives the confidence through tests. I probably should have written these tests at the time given it is controlling behaviour.
+
+#### A decision on asserting events and verifying invocations
+My implementation was to send the events directly to the UI, but the book introduces an `AuditEventListener` class which can be mocked to check a method is invoked rather than asserting on an event being raised. I decide to try both in parallel. [Here is the comparison](https://github.com/reub-the-cube/auction-sniper/commit/d021b009968e5b0f070e32217082c59902a7ec02) between the two approaches. There is a neatness about the mock that isn't there with the event handler in the tests, so I will try to keep aligned to the book here.
+
+#### Changing tack to align on invocations
+As I do this, I decide that it seems to me the sniper and the auction house will translate messages differently. For example, the auction house needs to know when a client joins, and the client needs to know when the auction ends. There may be shared translations too, but by separating these at this point, I can keep my tests green without creating an auction event listener specifically for the tests (as it's not yet required).
+
+At this point it is still on red for the acceptance test (making a higher bid), but green on the first unit test for the auction closed event.
+
+[This](https://github.com/reub-the-cube/auction-sniper/commit/eb63800f0502c0e46ce762a88844843bbd32f2e0) is how the repository looks after this step.
