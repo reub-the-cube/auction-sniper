@@ -8,35 +8,32 @@ namespace AuctionSniper.App
     public partial class MainPage : ContentPage
     {
         private readonly IConfiguration configuration;
-        private SniperTranslator? messageTranslator;
-        private readonly Client xmppClient;
+        private readonly IServiceProvider serviceProvider;
 
         public MainPage(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
             this.configuration = configuration;
-            xmppClient = serviceProvider.GetRequiredService<Client>();
-
-            xmppClient.ClientHasBinded += XmppClient_ClientHasBinded;
-        }
-
-        private void XmppClient_ClientHasBinded(object? sender, EventArgs e)
-        {
-            // send a join message to the user for the auction's item
-            Jid auctionUser = xmppClient.CreateJidFromLocalUsername($"auction-{ItemId.Text}");
-            xmppClient.SendMessageAsync(auctionUser, SouthabeeStandards.JOIN_REQUEST).ContinueWith(result =>
-            {
-                MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
-                bindingContext.SniperBidStatus = "Joining";
-            });
+            this.serviceProvider = serviceProvider;
         }
 
         private async void OnJoinClicked(object sender, EventArgs e)
         {
             try
             {
-                messageTranslator = new SniperTranslator(new Core.AuctionSniper(new Auction(xmppClient), (MainPageViewModel)BindingContext));
+                Client xmppClient = serviceProvider.GetRequiredService<Client>();
+                Auction auction = new(xmppClient, ItemId.Text);
+                Core.AuctionSniper sniper = new(auction, (MainPageViewModel)BindingContext);
+                IMessageTranslator messageTranslator = new SniperTranslator(sniper);
+
+                xmppClient.ClientHasBinded += (object? sender, EventArgs e) => {
+                    auction.Join().ContinueWith(result =>
+                    {
+                        MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
+                        bindingContext.SniperBidStatus = "Joining";
+                    });
+                };
 
                 string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
                 ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
@@ -51,14 +48,6 @@ namespace AuctionSniper.App
             {
                 Console.WriteLine(ex.ToString());
             }
-        }
-    }
-
-    public class Auction(Client xmppClient) : Core.Auction
-    {
-        public async Task Bid(int amount)
-        {
-            await xmppClient.SendMessageAsync(null, string.Format(SouthabeeStandards.BID_REQUEST, amount));
         }
     }
 }

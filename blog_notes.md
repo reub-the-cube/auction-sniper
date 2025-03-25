@@ -211,3 +211,9 @@ This activity introduces another layer for handling the auction events, to allow
 The circular dependency issue from the book isn't a problem for my work, so I add an implementation of the `Auction` interface locally to the Main Page, expected it to move shortly. My XMPP client takes the user as an argument to the message, which is different from the Smack API in the book, so I'll need to think about that soon. The end-to-end tests are green, with the status updating to 'Bidding' and then to 'Lost' when the auction closes. 
 
 [This](https://github.com/reub-the-cube/auction-sniper/tree/d3845bfa00ab5a4f6ecd5536dd3e7c29c0e4999b) is how the repository looks after this step.
+
+### Activity 13.3 - Tidying Up the Implementation
+
+I had already moved the auction class out of the noise of the main page, which is what happens next in the book. I decide to add a `Join` method to the `Auction` interface to enforce the concrete type to join the auction. I also wonder about how it'll work with multiple auctions, so I re-work the MainPage to handle the `Auction` at item level, rather than page level. Not sure how this will develop yet, but it actually moves the structure of the code closer to what is in the book for now.
+
+I already have the SniperListener implemented away from MainPage, on the `MainPageViewModel`, which might need more work later but I'm OK with that for now. I choose not to refactor the `SniperTranslator` as I don't think we have a use case that calls for it yet, and it is clear to read.
