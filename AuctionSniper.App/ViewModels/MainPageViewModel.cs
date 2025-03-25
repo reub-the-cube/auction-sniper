@@ -22,5 +22,10 @@ namespace AuctionSniper.App.ViewModels
         {
             SniperBidStatus = "Lost";
         }
+
+        public void CurrentPrice(int price, int increment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

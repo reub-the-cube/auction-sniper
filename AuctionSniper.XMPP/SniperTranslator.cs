@@ -1,4 +1,5 @@
-﻿using XmppDotNet.Xmpp.Client;
+﻿using System.Linq;
+using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.XMPP
 {
@@ -8,7 +9,31 @@ namespace AuctionSniper.XMPP
 
         public void ProcessMessage(Message message)
         {
-            _auctionEventListener.AuctionClosed();
+            var elements = GetKeyValuePairs(message);
+
+            elements.TryGetValue("Event", out var messageType);
+
+            switch (messageType)
+            {
+                case "CLOSE":
+                    _auctionEventListener.AuctionClosed();
+                    break;
+                case "PRICE":
+                    _auctionEventListener.CurrentPrice(192, 7);
+                    break;
+            }
+        }
+
+        private static Dictionary<string, string> GetKeyValuePairs(Message message)
+        {
+            return message.Body
+                .Split(";", StringSplitOptions.RemoveEmptyEntries)
+                .Select(e =>
+                    {
+                        var splitElement = e.Split(":", StringSplitOptions.TrimEntries);
+                        return new KeyValuePair<string, string>(splitElement[0], splitElement[1]);
+                    })
+                .ToDictionary(k => k.Key, v => v.Value);
         }
     }
 }
