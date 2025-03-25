@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSniper.AuctionHarnes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSniper.SniperHarness", "AuctionSniper.SniperHarness\AuctionSniper.SniperHarness.csproj", "{CAC2607D-F058-4BC1-9D71-80339CB5EA2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionSniper.UnitTests", "AuctionSniper.UnitTests\AuctionSniper.UnitTests.csproj", "{101C7617-C8E2-49F3-9305-F38ECA428738}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{CAC2607D-F058-4BC1-9D71-80339CB5EA2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC2607D-F058-4BC1-9D71-80339CB5EA2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC2607D-F058-4BC1-9D71-80339CB5EA2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{101C7617-C8E2-49F3-9305-F38ECA428738}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{101C7617-C8E2-49F3-9305-F38ECA428738}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{101C7617-C8E2-49F3-9305-F38ECA428738}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{101C7617-C8E2-49F3-9305-F38ECA428738}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
