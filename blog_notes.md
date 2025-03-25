@@ -199,3 +199,15 @@ The second test for a different auction event is simple enough. With the [Moq](h
 I included two commits here, though it could have been more, jumping over an element the book skips around the obvious implementation. The first commit has the values of the test in the production code, but the second parses the message properties to send the correct parameters to the `CurrentPrice` method.
 
 [This](https://github.com/reub-the-cube/auction-sniper/tree/64fde75f7af435999f7cd1c7be0913da7681c72f) is how the repository looks after this step.
+
+## Chapter 13 - The Sniper Makes a Bid
+
+### Activity 13.1 - Introducing AuctionSniper
+
+This activity introduces another layer for handling the auction events, to allow updates to go from the `MessageTranslator` to the `AuctionEventListener` to a `SniperListener`, which is bound to the UI. With the .NET MAUI project, I have to create a new class library to be able to reference the `AuctionSniper` from the tests and the MAUI app project but that is simple enough.
+
+### Activity 13.2 - Sending a Bid
+
+The circular dependency issue from the book isn't a problem for my work, so I add an implementation of the `Auction` interface locally to the Main Page, expected it to move shortly. My XMPP client takes the user as an argument to the message, which is different from the Smack API in the book, so I'll need to think about that soon. The end-to-end tests are green, with the status updating to 'Bidding' and then to 'Lost' when the auction closes. 
+
+[This](https://github.com/reub-the-cube/auction-sniper/tree/d3845bfa00ab5a4f6ecd5536dd3e7c29c0e4999b) is how the repository looks after this step.
