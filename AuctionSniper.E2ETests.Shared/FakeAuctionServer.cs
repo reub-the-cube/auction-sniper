@@ -28,7 +28,7 @@ namespace E2ETests
             ClientUser auctionItemUser = BaseFixture.Configuration.GetSection($"xmppSettings:{auctionId}").Get<ClientUser>() ?? throw new Exception($"Section with name xmppSettings:{auctionId} of test settings file could not be loaded.");
             string xmppServer = BaseFixture.Configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception($"Section with name xmppSettings:server of test settings file could not be loaded.");
 
-            await xmppClient.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, messageListener);
+            await xmppClient.CreateWithLogAsync(auctionItemUser.Username, auctionItemUser.Password, xmppServer, messageListener, null);
         }
 
         public bool HasBeenJoined()

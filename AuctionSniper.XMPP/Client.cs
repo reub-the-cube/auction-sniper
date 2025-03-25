@@ -24,7 +24,7 @@ namespace AuctionSniper.XMPP
             ClientHasBinded = delegate { };
         }
 
-        public async Task CreateWithLogAsync(string username, string password, string server, bool acceptAllCertificates, MessageListener messageListener)
+        public async Task CreateWithLogAsync(string username, string password, string server, bool acceptAllCertificates, MessageListener messageListener, MessageTranslator? messageTranslator)
         {
             xmppClient = new XmppClient(
                 conf =>
@@ -60,6 +60,7 @@ namespace AuctionSniper.XMPP
                     // handle the message here
                     logger.LogInformation(el.ToString());
                     messageListener.ProcessMessage(this, (Message)el);
+                    messageTranslator?.ProcessMessage((Message)el);
                 });
 
             xmppClient
@@ -74,9 +75,9 @@ namespace AuctionSniper.XMPP
 
             await xmppClient.ConnectAsync();
         }
-        public async Task CreateWithLogAsync(string username, string password, string server, MessageListener messageListener)
+        public async Task CreateWithLogAsync(string username, string password, string server, MessageListener messageListener, MessageTranslator? messageTranslator)
         {
-            await CreateWithLogAsync(username, password, server, false, messageListener);
+            await CreateWithLogAsync(username, password, server, false, messageListener, messageTranslator);
         }
 
         public Jid CreateJidFromLocalUsername(string username)

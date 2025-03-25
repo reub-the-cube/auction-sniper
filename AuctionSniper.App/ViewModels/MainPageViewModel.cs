@@ -1,6 +1,8 @@
-﻿namespace AuctionSniper.App.ViewModels
+﻿using AuctionSniper.XMPP;
+
+namespace AuctionSniper.App.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : ViewModelBase, IAuctionEventListener
     {
         string sniperBidStatus;
         public string SniperBidStatus
@@ -14,6 +16,11 @@
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void AuctionClosed()
+        {
+            SniperBidStatus = "Lost";
         }
     }
 }

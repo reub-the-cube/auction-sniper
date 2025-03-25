@@ -9,6 +9,7 @@ namespace AuctionSniper.App
     {
         private readonly IConfiguration configuration;
         private readonly MessageListener messageListener = new();
+        private MessageTranslator? messageTranslator;
         private readonly Client xmppClient;
 
         public MainPage(IConfiguration configuration, IServiceProvider serviceProvider)
@@ -18,7 +19,7 @@ namespace AuctionSniper.App
             this.configuration = configuration;
             xmppClient = serviceProvider.GetRequiredService<Client>();
 
-            messageListener.CloseMessageReceived += MessageListener_CloseMessageReceived;
+            //messageListener.CloseMessageReceived += MessageListener_CloseMessageReceived;
             xmppClient.ClientHasBinded += XmppClient_ClientHasBinded;
         }
 
@@ -45,13 +46,15 @@ namespace AuctionSniper.App
         {
             try
             {
+                messageTranslator = new MessageTranslator((MainPageViewModel)BindingContext);
+
                 string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
                 ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
 
 #if ANDROID
-                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageListener);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageListener, messageTranslator);
 #else
-                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, messageListener);
+                await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, messageListener, messageTranslator);
 #endif
             }
             catch (Exception ex)
@@ -59,6 +62,5 @@ namespace AuctionSniper.App
                 Console.WriteLine(ex.ToString());
             }
         }
-
     }
 }
