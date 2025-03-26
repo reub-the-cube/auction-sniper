@@ -238,8 +238,6 @@ Updating the current unit tests makes sense, but I do this one at a time. Allowi
 
 When I consider the `States` syntax, I don't have an immediate equivalent to call upon. `Moq` allows you to add callbacks and create sequences. I think the same can be achieved here, although I am concerned about coupling the test too closely to the code. The assertion is that if the sniper is bidding when the auction closes then it will be lost, but it is only bidding after a price has been reported from another bidder.
 
-So far, I have only used the `Verify` option with a expression on the object under test for assertions. I choose to go with a `MockSequence` here, which requires `MockBehavior.Strict`, which means I can just call `.Verify()` to wrap up the test. I will see where the tests go, but an alternative would be to assert/verify after each action e.g. _when_ reporting a price _then_ the sniper is bidding, _when_ the auction closes _then_ the sniper has lost.
+So far, I have only used the `Verify` option with a expression on the object under test for assertions. I choose to go with a `MockSequence` here, which requires `MockBehavior.Strict`. I ensure the last method in the sequence is called at least once, to verify that it has happened, to wrap up the test. I will see where the tests go, but an alternative would be to assert/verify after each action e.g. _when_ reporting a price _then_ the sniper is bidding, _when_ the auction closes _then_ the sniper has lost.
 
-### Detour to get confidence in the `AuctionHouseTranslator`
-
-I don't know that the auction house received a message _from_ the sniper.
+[This](https://github.com/reub-the-cube/auction-sniper/tree/cb8d1c156a93b61ed357e73816da05cdc29aa0a2) is how the repository looks after this step.
