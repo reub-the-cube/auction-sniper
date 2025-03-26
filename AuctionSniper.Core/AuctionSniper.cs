@@ -17,7 +17,8 @@ namespace AuctionSniper.Core
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
         {
-            throw new NotImplementedException();
+            auction.Bid(price + increment);
+            sniperListener.SniperBidding();
         }
     }
 }
