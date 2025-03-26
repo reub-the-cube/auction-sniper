@@ -32,5 +32,10 @@ namespace AuctionSniper.App.ViewModels
         {
             SniperBidStatus = "Winning";
         }
+
+        public void SniperWon()
+        {
+            SniperBidStatus = "Won";
+        }
     }
 }

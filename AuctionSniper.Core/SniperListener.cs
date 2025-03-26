@@ -7,5 +7,7 @@
         void SniperLost();
 
         void SniperWinning();
+
+        void SniperWon();
     }
 }
