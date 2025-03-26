@@ -41,11 +41,6 @@
             <Label
                 Text="Sniper bid status:" />
 
-            <Label
-                Text="{Binding x:DataType=local:MainPageViewModel, Path=SniperBidStatus}"
-                x:Name="SniperBidStatus"
-                AutomationId="SniperBidStatus" />
-
             <Grid Margin="20">
                 <ListView ItemsSource="{Binding Snipers}">
                     <ListView.ItemTemplate>
@@ -60,7 +55,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding BidStatus}" AutomationId="SniperBidStatus_new"  />
+                                    <Label Text="{Binding BidStatus}" AutomationId="SniperBidStatus"  />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

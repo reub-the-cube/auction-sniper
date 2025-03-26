@@ -22,18 +22,20 @@ namespace AuctionSniper.App
         {
             try
             {
+                ((MainPageViewModel)BindingContext).Snipers[0].BidStatus = "Unjoined";
+
                 (string server, ClientUser sniperUser) = GetXMPPConfigurationDetails();
 
                 Client xmppClient = serviceProvider.GetRequiredService<Client>();
                 Auction auction = new(xmppClient, ItemId.Text);
-                Core.AuctionSniper sniper = new(auction, (MainPageViewModel)BindingContext);
+                Core.AuctionSniper sniper = new(auction, ((MainPageViewModel)BindingContext).Snipers[0]);
                 IMessageTranslator messageTranslator = new SniperTranslator(sniper, sniperUser.Username);
 
                 xmppClient.ClientHasBinded += (object? sender, EventArgs e) => {
                     auction.Join().ContinueWith(result =>
                     {
                         MainPageViewModel bindingContext = (MainPageViewModel)BindingContext;
-                        bindingContext.SniperBidStatus = "Joining";
+                        bindingContext.Snipers[0].BidStatus = "Joining";
                     });
                 };
 

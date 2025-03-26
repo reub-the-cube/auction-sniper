@@ -241,3 +241,15 @@ When I consider the `States` syntax, I don't have an immediate equivalent to cal
 So far, I have only used the `Verify` option with a expression on the object under test for assertions. I choose to go with a `MockSequence` here, which requires `MockBehavior.Strict`. I ensure the last method in the sequence is called at least once, to verify that it has happened, to wrap up the test. I will see where the tests go, but an alternative would be to assert/verify after each action e.g. _when_ reporting a price _then_ the sniper is bidding, _when_ the auction closes _then_ the sniper has lost.
 
 [This](https://github.com/reub-the-cube/auction-sniper/tree/cb8d1c156a93b61ed357e73816da05cdc29aa0a2) is how the repository looks after this step.
+
+## Chapter 15 - Towards a Real User Interface
+
+### A More Realistic Implementation
+
+I opt to use a [ListView](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/listview?view=net-maui-9.0&source=recommendations) for presenting the data. The test side is already quite neat, from using the `AutomationId` attribute on a XAML element, so I just need to ensure the status field of the list view has the correct id.
+
+I added a list of snipers alongside the existing sniper. I found that when updating the property of the sniper with the bid status, it wasn't reflected in the app when just using an `ObservableCollection`, so needed to raise the `OnPropertyChanged` event as was being done with the original sniper. I did this by using a combination of the dotnet samples, and [an easy-to-understand mini tutorial on `ObservableCollection`](https://wellsb.com/csharp/maui/observablecollection-dotnet-maui).
+
+I then remove the bindings to the original sniper, and the UI is now tied to the first item in the list of snipers. There's an piece on the to-do list for handling multiple items so I'll tackle that problem then.
+
+I think there's a dependency in my tests, because the always pass in isolation but often fail in a group. I expect it's holding onto the chat and not resetting the status from the sniper's perspective or something. The app isn't reloaded for each end-to-end test so there must be some lingering state that I should tidy up.
