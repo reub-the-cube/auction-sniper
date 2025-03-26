@@ -29,17 +29,16 @@ public class MainPageTests : BaseTest
 		await auction.StartSellingItem();
 
 		// Act
-		await StartBiddingIn(auction);
+		await StartBiddingIn();
 
 		// Assert
 		SniperBiddingStatus().ShouldBe("Joining");
 		auction.HasBeenJoined().ShouldBe(true);
 
 		// Act
-		await auction.AnnounceClosed();
+		await EndAuction();
 
 		// Assert
-		await Task.Delay(PlatformTestFixture.DefaultDelay);
 		SniperBiddingStatus().ShouldBe("Lost");
 	}
 
@@ -50,7 +49,7 @@ public class MainPageTests : BaseTest
         await auction.StartSellingItem();
 
         // Act
-        await StartBiddingIn(auction);
+        await StartBiddingIn();
 
 		// Assert
         auction.HasBeenJoined().ShouldBe(true);
@@ -61,17 +60,43 @@ public class MainPageTests : BaseTest
 
         // Assert
         ClientUser sniperUser = BaseFixture.Configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
-        auction.HasReceivedBid(1098, sniperUser.Username);
+        auction.HasReceivedBid(1098, sniperUser.Username).ShouldBe(true);
 
         // Act
-        await auction.AnnounceClosed();
+        await EndAuction();
 
         // Assert
-        await Task.Delay(PlatformTestFixture.DefaultDelay);
         SniperBiddingStatus().ShouldBe("Lost");
     }
 
-	private async Task StartBiddingIn(FakeAuctionServer auction)
+	[Fact]
+	public async Task SniperWinsAuctionByBiddingHigher()
+	{
+		await auction.StartSellingItem();
+		
+		await StartBiddingIn();
+		auction.HasBeenJoined().ShouldBe(true);
+
+		await auction.ReportPrice(1000, 98, "other bidder");
+		SniperBiddingStatus().ShouldBe("Bidding");
+
+        ClientUser sniperUser = BaseFixture.Configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
+        auction.HasReceivedBid(1098, sniperUser.Username).ShouldBe(true);
+
+		await auction.ReportPrice(1098, 97, sniperUser.Username);
+		SniperBiddingStatus().ShouldBe("Winning");
+
+		await EndAuction();
+		SniperBiddingStatus().ShouldBe("Won");
+    }
+
+	private async Task EndAuction()
+	{
+		await auction.AnnounceClosed();
+		await Task.Delay(PlatformTestFixture.DefaultDelay);
+	}
+
+	private async Task StartBiddingIn()
 	{
 		var auctionIdText = FindUIElement("ItemId");
 		auctionIdText.Clear();
