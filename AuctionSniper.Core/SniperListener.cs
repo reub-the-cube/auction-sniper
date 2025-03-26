@@ -5,5 +5,7 @@
         void SniperBidding();
 
         void SniperLost();
+
+        void SniperWinning();
     }
 }

@@ -11,8 +11,16 @@ namespace AuctionSniper.Core
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
         {
-            auction.Bid(price + increment);
-            sniperListener.SniperBidding();
+            switch (priceSource)
+            {
+                case AuctionEventEnums.PriceSource.FromSniper:
+                    sniperListener.SniperWinning();
+                    break;
+                case AuctionEventEnums.PriceSource.FromOtherBidder:
+                    auction.Bid(price + increment);
+                    sniperListener.SniperBidding();
+                    break;
+            }
         }
     }
 }

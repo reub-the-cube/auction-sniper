@@ -84,7 +84,7 @@ public class MainPageTests : BaseTest
         auction.HasReceivedBid(1098, sniperUser.Username).ShouldBe(true);
 
 		await auction.ReportPrice(1098, 97, sniperUser.Username);
-		SniperBiddingStatus().ShouldBe("Winning");
+        SniperBiddingStatus().ShouldBe("Winning");
 
 		await EndAuction();
 		SniperBiddingStatus().ShouldBe("Won");

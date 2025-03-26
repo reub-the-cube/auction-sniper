@@ -30,5 +30,13 @@ namespace AuctionSniper.UnitTests
             sniperListener.Verify(v => v.SniperBidding(), Times.AtLeastOnce());
             auction.Verify(v => v.Bid(1001 + 25), Times.Once());
         }
+
+        [Fact]
+        public void ReportsWinningWhenCurrentPriceComesFromSniper()
+        {
+            auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromSniper);
+
+            sniperListener.Verify(v => v.SniperWinning(), Times.AtLeastOnce());
+        }
     }
 }
