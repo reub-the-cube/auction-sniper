@@ -22,10 +22,12 @@ namespace AuctionSniper.App
         {
             try
             {
+                (string server, ClientUser sniperUser) = GetXMPPConfigurationDetails();
+
                 Client xmppClient = serviceProvider.GetRequiredService<Client>();
                 Auction auction = new(xmppClient, ItemId.Text);
                 Core.AuctionSniper sniper = new(auction, (MainPageViewModel)BindingContext);
-                IMessageTranslator messageTranslator = new SniperTranslator(sniper);
+                IMessageTranslator messageTranslator = new SniperTranslator(sniper, sniperUser.Username);
 
                 xmppClient.ClientHasBinded += (object? sender, EventArgs e) => {
                     auction.Join().ContinueWith(result =>
@@ -34,9 +36,6 @@ namespace AuctionSniper.App
                         bindingContext.SniperBidStatus = "Joining";
                     });
                 };
-
-                string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
-                ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
 
 #if ANDROID
                 await xmppClient.CreateWithLogAsync(sniperUser.Username, sniperUser.Password, server, true, messageTranslator);
@@ -48,6 +47,14 @@ namespace AuctionSniper.App
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+
+        private (string server, ClientUser sniper) GetXMPPConfigurationDetails()
+        {
+            string server = configuration.GetSection($"xmppSettings:server").Get<string>() ?? throw new Exception("xmppSettings:server section of settings file could not be loaded.");
+            ClientUser sniperUser = configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
+
+            return (server, sniperUser);
         }
     }
 }
