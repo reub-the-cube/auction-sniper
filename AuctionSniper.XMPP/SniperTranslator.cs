@@ -3,7 +3,7 @@ using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.XMPP
 {
-    public class SniperTranslator(IAuctionEventListener auctionEventListener) : IMessageTranslator
+    public class SniperTranslator(IAuctionEventListener auctionEventListener, string sniperId = "not set") : IMessageTranslator
     {
         private readonly IAuctionEventListener _auctionEventListener = auctionEventListener;
 
