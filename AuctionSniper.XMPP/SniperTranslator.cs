@@ -3,7 +3,7 @@ using XmppDotNet.Xmpp.Client;
 
 namespace AuctionSniper.XMPP
 {
-    public class SniperTranslator(IAuctionEventListener auctionEventListener) : IMessageTranslator
+    public class SniperTranslator(IAuctionEventListener auctionEventListener, string sniperId) : IMessageTranslator
     {
         private readonly IAuctionEventListener _auctionEventListener = auctionEventListener;
 
@@ -21,7 +21,8 @@ namespace AuctionSniper.XMPP
                 case "PRICE":
                     int currentPrice = int.Parse(elements["CurrentPrice"]);
                     int increment = int.Parse(elements["Increment"]);
-                    _auctionEventListener.CurrentPrice(currentPrice, increment);
+                    var priceSource = elements["Bidder"] == sniperId ? AuctionEventEnums.PriceSource.FromSniper : AuctionEventEnums.PriceSource.FromOtherBidder;
+                    _auctionEventListener.CurrentPrice(currentPrice, increment, priceSource);
                     break;
             }
         }

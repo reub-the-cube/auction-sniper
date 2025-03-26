@@ -217,3 +217,17 @@ The circular dependency issue from the book isn't a problem for my work, so I ad
 I had already moved the auction class out of the noise of the main page, which is what happens next in the book. I decide to add a `Join` method to the `Auction` interface to enforce the concrete type to join the auction. I also wonder about how it'll work with multiple auctions, so I re-work the MainPage to handle the `Auction` at item level, rather than page level. Not sure how this will develop yet, but it actually moves the structure of the code closer to what is in the book for now.
 
 I already have the SniperListener implemented away from MainPage, on the `MainPageViewModel`, which might need more work later but I'm OK with that for now. I choose not to refactor the `SniperTranslator` as I don't think we have a use case that calls for it yet, and it is clear to read.
+
+## Chapter 14 - The Sniper Wins the Auction
+
+### Activity 14.1 - First, a Failing Test
+
+Adding the new end-to-end test is simple enough, which builds on the previous one by asking the option to report the price that the sniper has bid and opening the way for 'Winning' and 'Won' statuses.
+
+### Activity 14.2 - Who Knows about Bidders
+
+It's a minor difference but I update my unit tests before altering the production code at all, even if it doesn't complile. Write a failing test, make it compile, make it green. This isn't a blog post about Test-Driven Development, but I [TODO: created a branch](some-url) with a step-by-step commit on the changes I made.
+
+### Detour to get confidence in the `AuctionHouseTranslator`
+
+I don't know that the auction house received a message _from_ the sniper.
