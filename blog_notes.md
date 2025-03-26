@@ -222,11 +222,23 @@ I already have the SniperListener implemented away from MainPage, on the `MainPa
 
 ### Activity 14.1 - First, a Failing Test
 
-Adding the new end-to-end test is simple enough, which builds on the previous one by asking the option to report the price that the sniper has bid and opening the way for 'Winning' and 'Won' statuses.
+Adding the new end-to-end test is simple enough, which builds on the previous one by asking the option to report the price that the sniper has bid and opening the way for 'Winning' and 'Won' statuses. When I write this, I notice that the tests doesn't know that the auction knows it has been joined by _the sniper_, which feels important. I might look at this when we get back to green.
 
 ### Activity 14.2 - Who Knows about Bidders
 
-It's a minor difference but I update my unit tests before altering the production code at all, even if it doesn't complile. Write a failing test, make it compile, make it green. This isn't a blog post about Test-Driven Development, but I [TODO: created a branch](some-url) with a step-by-step commit on the changes I made.
+It's a minor difference but I update my unit tests before altering the production code at all, even if it doesn't complile. Write a failing test, make it compile, make it green. This isn't a blog post about Test-Driven Development, but I [created a branch](https://github.com/reub-the-cube/auction-sniper/commits/activity-14.2-who-knows-about-bidders/) with a step-by-step, near-to-one-line commits (14 of them) on the changes I made to add the `PriceSource` argument to the `CurrentPrice` method.
+
+### Activity 14.3 - The Sniper Has More to Say
+
+Unit tests need adding before working through the logic back to the Application and the `SniperListener` will need to be told the sniper is winning.
+
+### Activity 14.4 - The Sniper Acquires Some State
+
+Updating the current unit tests makes sense, but I do this one at a time. Allowing, expected and ignoring are similar concepts to the `MockBehavior` mentioned above. Before making the change, I am only verifying against specific invocations I specify, so - for example - `ignoring(auction)` is already satisifed. This would not have been the case if I were mocking `Auction` with `MockBehavior.Strict`.
+
+When I consider the `States` syntax, I don't have an immediate equivalent to call upon. `Moq` allows you to add callbacks and create sequences. I think the same can be achieved here, although I am concerned about coupling the test too closely to the code. The assertion is that if the sniper is bidding when the auction closes then it will be lost, but it is only bidding after a price has been reported from another bidder.
+
+So far, I have only used the `Verify` option with a expression on the object under test for assertions. I choose to go with a `MockSequence` here, which requires `MockBehavior.Strict`, which means I can just call `.Verify()` to wrap up the test. I will see where the tests go, but an alternative would be to assert/verify after each action e.g. _when_ reporting a price _then_ the sniper is bidding, _when_ the auction closes _then_ the sniper has lost.
 
 ### Detour to get confidence in the `AuctionHouseTranslator`
 

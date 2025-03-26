@@ -6,7 +6,7 @@ namespace AuctionSniper.UnitTests
     public class AuctionSniperTests
     {
         private readonly Mock<Auction> auction = new();
-        private readonly Mock<SniperListener> sniperListener = new();
+        private Mock<SniperListener> sniperListener = new();
         private readonly Core.AuctionSniper auctionSniper;
 
         public AuctionSniperTests()
@@ -15,11 +15,25 @@ namespace AuctionSniper.UnitTests
         }
 
         [Fact]
-        public void ReportsLostWhenAuctionCloses()
+        public void ReportsLostWhenAuctionClosesImmediately()
         {
             auctionSniper.AuctionClosed();
 
             sniperListener.Verify(v => v.SniperLost(), Times.Once());
+        }
+
+        [Fact]
+        public void ReportsLostIfAuctionClosesWhenBidding()
+        {
+            var sequence = new MockSequence();
+            sniperListener = new Mock<SniperListener>(MockBehavior.Strict);
+            sniperListener.InSequence(sequence).Setup(s => s.SniperBidding());
+            sniperListener.InSequence(sequence).Setup(s => s.SniperLost());
+
+            auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
+            auctionSniper.AuctionClosed();
+
+            sniperListener.Verify();
         }
 
         [Fact]
