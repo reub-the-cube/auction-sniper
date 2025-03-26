@@ -1,6 +1,7 @@
 ﻿using AuctionSniper.XMPP;
 using Moq;
 using XmppDotNet.Xmpp.Client;
+using static AuctionSniper.XMPP.AuctionEventEnums;
 
 namespace AuctionSniper.UnitTests
 {
