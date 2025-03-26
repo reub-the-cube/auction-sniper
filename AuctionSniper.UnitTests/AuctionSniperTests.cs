@@ -25,7 +25,7 @@ namespace AuctionSniper.UnitTests
         [Fact]
         public void BidsHigherAndReportsBiddingWhenNewPriceArrives()
         {
-            auctionSniper.CurrentPrice(1001, 25);
+            auctionSniper.CurrentPrice(1001, 25, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
 
             sniperListener.Verify(v => v.SniperBidding(), Times.AtLeastOnce());
             auction.Verify(v => v.Bid(1001 + 25), Times.Once());
