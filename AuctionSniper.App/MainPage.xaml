@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AuctionSniper.App.ViewModels"
+             xmlns:models="clr-namespace:AuctionSniper.App.Models"
              x:Class="AuctionSniper.App.MainPage">
     <ContentPage.BindingContext>
         <local:MainPageViewModel />
@@ -44,6 +45,29 @@
                 Text="{Binding x:DataType=local:MainPageViewModel, Path=SniperBidStatus}"
                 x:Name="SniperBidStatus"
                 AutomationId="SniperBidStatus" />
+
+            <Grid Margin="20">
+                <ListView ItemsSource="{Binding Snipers}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Sniper">
+                            <ViewCell>
+                                <Grid Padding="10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding BidStatus}" AutomationId="SniperBidStatus_new"  />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+            
         </VerticalStackLayout>
 
     </ScrollView>

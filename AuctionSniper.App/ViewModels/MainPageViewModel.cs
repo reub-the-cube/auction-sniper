@@ -1,4 +1,6 @@
-﻿using AuctionSniper.Core;
+﻿using AuctionSniper.App.Models;
+using AuctionSniper.Core;
+using System.Collections.ObjectModel;
 
 namespace AuctionSniper.App.ViewModels
 {
@@ -13,9 +15,21 @@ namespace AuctionSniper.App.ViewModels
                 if (sniperBidStatus != value)
                 {
                     sniperBidStatus = value;
+                    Snipers[0].BidStatus = value;
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public ObservableCollection<Sniper> Snipers { get; private set; }
+
+        public MainPageViewModel()
+        {
+            var source = new List<Sniper>
+            {
+                new() { BidStatus = "Unjoined"}
+            };
+            Snipers = [.. source];
         }
 
         public void SniperBidding()
