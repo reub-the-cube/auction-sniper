@@ -19,7 +19,7 @@ namespace AuctionSniper.UnitTests
         }
 
         [Fact]
-        public void NotifiesBidDetailsWhenCurrentPriceMessageReceived()
+        public void NotifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder()
         {
             var message = new Message(string.Empty, string.Format(SouthabeeStandards.REPORT_PRICE_EVENT, 192, 7, "Someone else"));
             var auctionEventListener = new Mock<IAuctionEventListener>();
@@ -27,7 +27,7 @@ namespace AuctionSniper.UnitTests
 
             translator.ProcessMessage(message);
 
-            auctionEventListener.Verify(v => v.CurrentPrice(192, 7), Times.Once());
+            auctionEventListener.Verify(v => v.CurrentPrice(192, 7, PriceSource.FromOtherBidder), Times.Once());
         }
     }
 }
