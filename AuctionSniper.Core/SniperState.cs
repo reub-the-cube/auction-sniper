@@ -1,4 +1,11 @@
 ﻿namespace AuctionSniper.Core
 {
-    public record SniperState(string ItemId, int Price, int Bid) { }
+    public enum SniperState
+    {
+        Joining,
+        Bidding,
+        Winning,
+        Lost,
+        Won
+    }
 }

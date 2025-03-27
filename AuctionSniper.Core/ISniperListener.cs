@@ -2,11 +2,9 @@
 {
     public interface ISniperListener
     {
-        void SniperBidding(SniperState sniperState);
+        void SniperSnapshotChanged(SniperSnapshot sniperSnapshot);
 
         void SniperLost();
-
-        void SniperWinning();
 
         void SniperWon();
     }

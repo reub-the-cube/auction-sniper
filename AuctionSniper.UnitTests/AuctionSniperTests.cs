@@ -29,7 +29,7 @@ namespace AuctionSniper.UnitTests
         public void ReportsLostIfAuctionClosesWhenBidding()
         {
             var sequence = new MockSequence();
-            sniperListener.InSequence(sequence).Setup(s => s.SniperBidding(It.IsAny<SniperState>()));
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(It.Is<SniperSnapshot>(s => s.State == SniperState.Bidding)));
             sniperListener.InSequence(sequence).Setup(s => s.SniperLost());
 
             auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
@@ -42,9 +42,11 @@ namespace AuctionSniper.UnitTests
         public void ReportsWonIfAuctionClosesWhenWinning()
         {
             var sequence = new MockSequence();
-            sniperListener.InSequence(sequence).Setup(s => s.SniperWinning());
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(It.Is<SniperSnapshot>(s => s.State == SniperState.Bidding)));
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(new(ITEM_ID, 123, 123, SniperState.Winning)));
             sniperListener.InSequence(sequence).Setup(s => s.SniperWon());
 
+            auctionSniper.CurrentPrice(111, 12, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
             auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromSniper);
             auctionSniper.AuctionClosed();
 
@@ -57,22 +59,25 @@ namespace AuctionSniper.UnitTests
             int price = 1001;
             int increment = 25;
             int bid = price + increment;
-            sniperListener.Setup(s => s.SniperBidding(new SniperState(ITEM_ID, price, bid)));
+            sniperListener.Setup(s => s.SniperSnapshotChanged(new SniperSnapshot(ITEM_ID, price, bid, SniperState.Bidding)));
 
             auctionSniper.CurrentPrice(price, increment, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
 
-            sniperListener.Verify(v => v.SniperBidding(It.IsAny<SniperState>()), Times.AtLeastOnce());
+            sniperListener.Verify(v => v.SniperSnapshotChanged(It.IsAny<SniperSnapshot>()), Times.AtLeastOnce());
             auction.Verify(v => v.Bid(bid), Times.Once());
         }
 
         [Fact]
         public void ReportsWinningWhenCurrentPriceComesFromSniper()
         {
-            sniperListener.Setup(s => s.SniperWinning());
+            var sequence = new MockSequence();
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(It.Is<SniperSnapshot>(s => s.State == SniperState.Bidding)));
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(new(ITEM_ID, 123, 123, SniperState.Winning)));
 
+            auctionSniper.CurrentPrice(111, 12, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
             auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromSniper);
 
-            sniperListener.Verify(v => v.SniperWinning(), Times.AtLeastOnce());
+            sniperListener.Verify(v => v.SniperSnapshotChanged(It.IsAny<SniperSnapshot>()), Times.AtLeast(2));
         }
     }
 }

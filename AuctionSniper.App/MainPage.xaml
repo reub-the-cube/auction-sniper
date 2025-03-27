@@ -38,9 +38,6 @@
                 Clicked="OnJoinClicked"
                 HorizontalOptions="Fill" />
 
-            <Label
-                Text="Sniper bid status:" />
-
             <Grid Margin="20">
                 <ListView ItemsSource="{Binding Snipers}" HeightRequest="150">
                     <ListView.Header>
@@ -55,9 +52,9 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Text="Item Code" FontAttributes="Bold" />
-                            <Label Grid.Column="1" Text="Status" FontAttributes="Bold" />
-                            <Label Grid.Column="2" Text="Current Price" FontAttributes="Bold" />
-                            <Label Grid.Column="3" Text="Last Bid" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Current Price" FontAttributes="Bold" />
+                            <Label Grid.Column="2" Text="Last Bid" FontAttributes="Bold" />
+                            <Label Grid.Column="3" Text="Sniper State" FontAttributes="Bold" />
                         </Grid>
                     </ListView.Header>
                     <ListView.ItemTemplate>
@@ -74,9 +71,9 @@
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0" Text="{Binding AuctionId}" AutomationId="SniperAuctionId" />
-                                    <Label Grid.Column="1" Text="{Binding BidStatus}" AutomationId="SniperBidStatus" />
-                                    <Label Grid.Column="2" Text="{Binding CurrentPrice}" AutomationId="SniperCurrentPrice" />
-                                    <Label Grid.Column="3" Text="{Binding LastBid}" AutomationId="SniperLastBid" />
+                                    <Label Grid.Column="1" Text="{Binding CurrentPrice}" AutomationId="SniperCurrentPrice" />
+                                    <Label Grid.Column="2" Text="{Binding LastBid}" AutomationId="SniperLastBid" />
+                                    <Label Grid.Column="3" Text="{Binding BidStatus}" AutomationId="SniperBidStatus" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

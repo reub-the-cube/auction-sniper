@@ -5,6 +5,7 @@ namespace AuctionSniper.Core
     public class AuctionSniper(Auction auction, ISniperListener sniperListener, string itemId) : IAuctionEventListener
     {
         private bool isWinning = false;
+        private SniperSnapshot snapshot = new(itemId, 0, 0, SniperState.Joining);
 
         public void AuctionClosed()
         {
@@ -24,14 +25,16 @@ namespace AuctionSniper.Core
 
             if (isWinning)
             {
-                sniperListener.SniperWinning();
+                snapshot = snapshot.Winning(price);
             }
             else
             {
                 int bid = price + increment;
                 auction.Bid(bid);
-                sniperListener.SniperBidding(new SniperState(itemId, price, bid));
+                snapshot = snapshot.Bidding(price, bid);
             }
+
+            sniperListener.SniperSnapshotChanged(snapshot);
         }
     }
 }

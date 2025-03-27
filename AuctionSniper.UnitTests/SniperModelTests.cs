@@ -16,7 +16,7 @@ namespace AuctionSniper.UnitTests
                 propertyChanged = true;
             };
 
-            sniper.SniperBidding(new Core.SniperState("item id", 555, 666));
+            sniper.SniperSnapshotChanged(new Core.SniperSnapshot("item id", 555, 666, Core.SniperState.Bidding));
 
             sniper.AuctionId.ShouldBe("item id");
             sniper.BidStatus.ShouldBe("Bidding");

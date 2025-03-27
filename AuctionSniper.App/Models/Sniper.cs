@@ -60,22 +60,17 @@ namespace AuctionSniper.App.Models
             }
         }
 
-        public void SniperBidding(SniperState sniperState)
+        public void SniperSnapshotChanged(SniperSnapshot sniperSnapshot)
         {
-            AuctionId = sniperState.ItemId;
-            BidStatus = "Bidding";
-            CurrentPrice = sniperState.Price;
-            LastBid = sniperState.Bid;
+            AuctionId = sniperSnapshot.ItemId;
+            BidStatus = sniperSnapshot.State.ToString();
+            CurrentPrice = sniperSnapshot.Price;
+            LastBid = sniperSnapshot.Bid;
         }
 
         public void SniperLost()
         {
             BidStatus = "Lost";
-        }
-
-        public void SniperWinning()
-        {
-            BidStatus = "Winning";
         }
 
         public void SniperWon()
