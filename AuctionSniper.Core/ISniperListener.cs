@@ -1,8 +1,8 @@
 ﻿namespace AuctionSniper.Core
 {
-    public interface SniperListener
+    public interface ISniperListener
     {
-        void SniperBidding();
+        void SniperBidding(SniperState sniperState);
 
         void SniperLost();
 

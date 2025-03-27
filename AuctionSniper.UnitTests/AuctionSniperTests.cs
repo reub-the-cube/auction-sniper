@@ -5,13 +5,14 @@ namespace AuctionSniper.UnitTests
 {
     public class AuctionSniperTests
     {
+        private const string ITEM_ID = "TEST_ITEM_123";
         private readonly Mock<Auction> auction = new();
-        private readonly Mock<SniperListener> sniperListener = new(MockBehavior.Strict);
+        private readonly Mock<ISniperListener> sniperListener = new(MockBehavior.Strict);
         private readonly Core.AuctionSniper auctionSniper;
 
         public AuctionSniperTests()
         {
-            auctionSniper = new Core.AuctionSniper(auction.Object, sniperListener.Object);
+            auctionSniper = new Core.AuctionSniper(auction.Object, sniperListener.Object, ITEM_ID);
         }
 
         [Fact]
@@ -28,7 +29,7 @@ namespace AuctionSniper.UnitTests
         public void ReportsLostIfAuctionClosesWhenBidding()
         {
             var sequence = new MockSequence();
-            sniperListener.InSequence(sequence).Setup(s => s.SniperBidding());
+            sniperListener.InSequence(sequence).Setup(s => s.SniperBidding(It.IsAny<SniperState>()));
             sniperListener.InSequence(sequence).Setup(s => s.SniperLost());
 
             auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
@@ -53,12 +54,15 @@ namespace AuctionSniper.UnitTests
         [Fact]
         public void BidsHigherAndReportsBiddingWhenNewPriceArrives()
         {
-            sniperListener.Setup(s => s.SniperBidding());
+            int price = 1001;
+            int increment = 25;
+            int bid = price + increment;
+            sniperListener.Setup(s => s.SniperBidding(new SniperState(ITEM_ID, price, bid)));
 
-            auctionSniper.CurrentPrice(1001, 25, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
+            auctionSniper.CurrentPrice(price, increment, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
 
-            sniperListener.Verify(v => v.SniperBidding(), Times.AtLeastOnce());
-            auction.Verify(v => v.Bid(1001 + 25), Times.Once());
+            sniperListener.Verify(v => v.SniperBidding(It.IsAny<SniperState>()), Times.AtLeastOnce());
+            auction.Verify(v => v.Bid(bid), Times.Once());
         }
 
         [Fact]

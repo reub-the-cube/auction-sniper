@@ -42,27 +42,51 @@
                 Text="Sniper bid status:" />
 
             <Grid Margin="20">
-                <ListView ItemsSource="{Binding Snipers}">
+                <ListView ItemsSource="{Binding Snipers}" HeightRequest="150">
+                    <ListView.Header>
+                        <Grid BackgroundColor="LightGray" Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="Item Code" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Status" FontAttributes="Bold" />
+                            <Label Grid.Column="2" Text="Current Price" FontAttributes="Bold" />
+                            <Label Grid.Column="3" Text="Last Bid" FontAttributes="Bold" />
+                        </Grid>
+                    </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="models:Sniper">
                             <ViewCell>
                                 <Grid Padding="10">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Label Text="{Binding BidStatus}" AutomationId="SniperBidStatus"  />
+                                    <Label Grid.Column="0" Text="{Binding AuctionId}" AutomationId="SniperAuctionId" />
+                                    <Label Grid.Column="1" Text="{Binding BidStatus}" AutomationId="SniperBidStatus" />
+                                    <Label Grid.Column="2" Text="{Binding CurrentPrice}" AutomationId="SniperCurrentPrice" />
+                                    <Label Grid.Column="3" Text="{Binding LastBid}" AutomationId="SniperLastBid" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
-            
+
+            <Label
+                Text="Hello:" />
+
         </VerticalStackLayout>
 
     </ScrollView>

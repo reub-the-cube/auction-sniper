@@ -244,7 +244,7 @@ So far, I have only used the `Verify` option with a expression on the object und
 
 ## Chapter 15 - Towards a Real User Interface
 
-### A More Realistic Implementation
+### Activity 15.1 A More Realistic Implementation
 
 I opt to use a [ListView](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/listview?view=net-maui-9.0&source=recommendations) for presenting the data. The test side is already quite neat, from using the `AutomationId` attribute on a XAML element, so I just need to ensure the status field of the list view has the correct id.
 
@@ -269,3 +269,24 @@ App.Close();
 ```
 
 Now the app re-opens after each test, giving a clean starting point for each one.
+
+### Activity 15.2 - Displaying Price Details
+
+I spend a bit of time thinking about this. The idea is to add the item identifier, the last price and the last bid. The last bid is interpreted differently by the authors to me. In this excerpt from the `sniperWinsauctionByBidderHigher` end-to-end test
+```
+[...]
+auction.reportPrice(1000, 98);
+application.hasShownSniperIsBidding(1000, 1098); // last price, last bid
+[...]
+```
+I think the last bid is either `1000` (made by "other bidder"), or nothing at all. Given it's the Sniper's view of the auction, they haven't yet made a bid, so I think it should be null. _After_ the auction reports a price _from the sniper_ then we should test that the sniper is winning. Thinking about it a bit more, if the auction house doesn't respond in real-time, it could be useful to return what has been bid (as opposed to what has been accepted by the auction). In the code this does happen this way; `auction.Bid()` before the `sniperListener.Bidding()` notification so I have talked myself around by thinking it through!
+
+I'm working out how the controls of the markup work, and struggle to get the spacing working as the cells went on top of each other. The starter docs use a fair amount of `Width=Auto` but [this article prompts me to use `Width=*`](https://learn.microsoft.com/en-us/dotnet/maui/user-interface/layouts/grid?view=net-maui-9.0#rows-and-columns), which is also the default value, and makes it look organised at least.
+
+The `SniperState` brings together the itemId, current price and last bid. I consider why it doesn't bundle up the status too in the value type. I suppose by keeping the listener events more declarative (`onBidding`, `onWinning` etc) it stays easier to read. I could also suggest that each sniper listener notifcation doesn't require all the state properties - for example when the auction closes, it's only the status that will have changed.
+
+When writing the tests for `SniperState`, when the value of the object is not of relevance to the test, I use the `Moq.It` type to allow any value through i.e. `It.IsAny<SniperState>()`.
+
+I add a unit test for the app, which checks the value of the properties on `Sniper` are set and the `OnPropertyChanged` event is raised to notify the view, and need to update the project properties of the App and the Unit Tests to be able to reference each other. Having the App project as a dependency for the unit tests makes them slower while it builds; I might extract them later.
+
+I have made quite a few changes, so commit on a red end-to-end test. It's failing (as in the book) because the price of 1000 hasn't been updated; this is because the sniper state isn't set for the other auction events (winning, won, lost).

@@ -28,7 +28,7 @@ namespace AuctionSniper.App
 
                 Client xmppClient = serviceProvider.GetRequiredService<Client>();
                 Auction auction = new(xmppClient, ItemId.Text);
-                Core.AuctionSniper sniper = new(auction, ((MainPageViewModel)BindingContext).Snipers[0]);
+                Core.AuctionSniper sniper = new(auction, ((MainPageViewModel)BindingContext).Snipers[0], ItemId.Text);
                 IMessageTranslator messageTranslator = new SniperTranslator(sniper, sniperUser.Username);
 
                 xmppClient.ClientHasBinded += (object? sender, EventArgs e) => {

@@ -2,7 +2,7 @@
 
 namespace AuctionSniper.Core
 {
-    public class AuctionSniper(Auction auction, SniperListener sniperListener) : IAuctionEventListener
+    public class AuctionSniper(Auction auction, ISniperListener sniperListener, string itemId) : IAuctionEventListener
     {
         private bool isWinning = false;
 
@@ -28,8 +28,9 @@ namespace AuctionSniper.Core
             }
             else
             {
-                auction.Bid(price + increment);
-                sniperListener.SniperBidding();
+                int bid = price + increment;
+                auction.Bid(bid);
+                sniperListener.SniperBidding(new SniperState(itemId, price, bid));
             }
         }
     }

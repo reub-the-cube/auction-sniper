@@ -78,16 +78,16 @@ public class MainPageTests : BaseTest
 		auction.HasBeenJoined().ShouldBe(true);
 
 		await auction.ReportPrice(1000, 98, "other bidder");
-		SniperBiddingStatus().ShouldBe("Bidding");
+		SniperStatusShouldBe("Bidding", 1000, 1098);
 
         ClientUser sniperUser = BaseFixture.Configuration.GetSection($"xmppSettings:sniper").Get<ClientUser>() ?? throw new Exception("xmppSettings:sniper section of settings file could not be loaded.");
         auction.HasReceivedBid(1098, sniperUser.Username).ShouldBe(true);
 
 		await auction.ReportPrice(1098, 97, sniperUser.Username);
-        SniperBiddingStatus().ShouldBe("Winning");
+		SniperStatusShouldBe("Winning", 1098, 1098);
 
 		await EndAuction();
-		SniperBiddingStatus().ShouldBe("Won");
+		SniperStatusShouldBe("Won", 1098, 1098);
     }
 
 	private async Task EndAuction()
@@ -108,9 +108,35 @@ public class MainPageTests : BaseTest
         await Task.Delay(PlatformTestFixture.DefaultDelay);
     }
 
+	private string SniperAuctionId()
+	{
+		var element = FindUIElement("SniperAuctionId");
+		return element.Text;
+	}
+
     private string SniperBiddingStatus()
 	{
 		var element = FindUIElement("SniperBidStatus");
 		return element.Text;
+	}
+
+	private string SniperCurrentPrice()
+	{
+		var element = FindUIElement("SniperCurrentPrice");
+		return element.Text;
+	}
+
+	private string SniperLastBid()
+	{
+		var element = FindUIElement("SniperLastBid");
+		return element.Text;
+	}
+
+	private void SniperStatusShouldBe(string bidStatus, int currentPrice, int lastBid)
+	{
+		SniperAuctionId().ShouldBe(AUCTION_ID);
+		SniperBiddingStatus().ShouldBe(bidStatus);
+		SniperCurrentPrice().ShouldBe(currentPrice.ToString());
+		SniperLastBid().ShouldBe(lastBid.ToString());
 	}
 }
