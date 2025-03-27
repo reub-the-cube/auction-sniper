@@ -290,3 +290,11 @@ When writing the tests for `SniperState`, when the value of the object is not of
 I add a unit test for the app, which checks the value of the properties on `Sniper` are set and the `OnPropertyChanged` event is raised to notify the view, and need to update the project properties of the App and the Unit Tests to be able to reference each other. Having the App project as a dependency for the unit tests makes them slower while it builds; I might extract them later.
 
 I have made quite a few changes, so commit on a red end-to-end test. It's failing (as in the book) because the price of 1000 hasn't been updated; this is because the sniper state isn't set for the other auction events (winning, won, lost).
+
+### Activity 15.3 - Simplifying Sniper Events
+
+This starts off by remarking on what I had spotted above - which is that the status should be bundled into the sniper state. It starts with a renaming from SniperState to SniperSnapshot, so that the words state and status are less easily confused - I like this.
+
+Updating the tests is simple enough, although one part catches me out as I have a each test needs to report the current price twice to get the sniper to winning (following the state machine). Without first bidding, the winning snapshot will have a bid price of 0.
+
+[This](https://github.com/reub-the-cube/auction-sniper/tree/560858e478650bbd213c3ce8603712d1a47e53c0) is how the repository looks after this step.
