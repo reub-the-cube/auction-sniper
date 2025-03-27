@@ -252,4 +252,20 @@ I added a list of snipers alongside the existing sniper. I found that when updat
 
 I then remove the bindings to the original sniper, and the UI is now tied to the first item in the list of snipers. There's an piece on the to-do list for handling multiple items so I'll tackle that problem then.
 
+### A detour for test interdependency
+
 I think there's a dependency in my tests, because the always pass in isolation but often fail in a group. I expect it's holding onto the chat and not resetting the status from the sniper's perspective or something. The app isn't reloaded for each end-to-end test so there must be some lingering state that I should tidy up.
+
+I could remove the Fixture from the test collection, but from what I understand the driver could be the same and control the app. I blunder around a little - some ideas and APIs online for Closing / Launching / Starting / Quitting the app are for different frameworks or have been deprecated.
+
+I choose to update the `BaseTest` to implement `IDisposable` which will execute for _each_ test, not every collection, which the idea to relaunch the app from the driver after each test has finished. I can call the PlatformTestFixture from here (which perhaps creates a bit of a blurred line for the true definition of a fixture) to add some platform-specific code for relaunching the app.
+```
+// Windows
+App.Close();
+(App as WindowsDriver)?.LaunchApp();
+
+// Android
+(App as AndroidDriver)?.StartActivity(<AppPackage>, <AppActivity>);
+```
+
+Now the app re-opens after each test, giving a clean starting point for each one.

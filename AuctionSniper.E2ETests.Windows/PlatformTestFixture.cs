@@ -39,4 +39,10 @@ public class PlatformTestFixture : BaseFixture, IDisposable
         // If an Appium server was started locally above, make sure we clean it up here
         AppiumServerHelper.DisposeAppiumLocalServer();
     }
+
+    internal static void RelaunchApp()
+    {
+        App.Close();
+        (App as WindowsDriver)?.LaunchApp();
+    }
 }
