@@ -9,16 +9,8 @@ namespace AuctionSniper.Core
 
         public void AuctionClosed()
         {
-            if (isWinning)
-            {
-                snapshot = snapshot.AuctionClosed();
-                sniperListener.SniperSnapshotChanged(snapshot);
-            }
-            else
-            {
-                snapshot = snapshot.AuctionClosed();
-                sniperListener.SniperSnapshotChanged(snapshot);
-            }
+            snapshot = snapshot.AuctionClosed();
+            sniperListener.SniperSnapshotChanged(snapshot);
         }
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
