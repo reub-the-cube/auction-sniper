@@ -43,14 +43,14 @@ namespace AuctionSniper.UnitTests
         {
             var sequence = new MockSequence();
             sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(It.Is<SniperSnapshot>(s => s.State == SniperState.Bidding)));
-            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(new(ITEM_ID, 123, 123, SniperState.Winning)));
-            sniperListener.InSequence(sequence).Setup(s => s.SniperWon());
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(It.Is<SniperSnapshot>(s => s.State == SniperState.Winning)));
+            sniperListener.InSequence(sequence).Setup(s => s.SniperSnapshotChanged(new(ITEM_ID, 123, 123, SniperState.Won)));
 
             auctionSniper.CurrentPrice(111, 12, XMPP.AuctionEventEnums.PriceSource.FromOtherBidder);
             auctionSniper.CurrentPrice(123, 45, XMPP.AuctionEventEnums.PriceSource.FromSniper);
             auctionSniper.AuctionClosed();
 
-            sniperListener.Verify(v => v.SniperWon(), Times.AtLeastOnce());
+            sniperListener.Verify(v => v.SniperSnapshotChanged(It.IsAny<SniperSnapshot>()), Times.AtLeast(3));
         }
 
         [Fact]
