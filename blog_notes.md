@@ -298,3 +298,13 @@ This starts off by remarking on what I had spotted above - which is that the sta
 Updating the tests is simple enough, although one part catches me out as I have a each test needs to report the current price twice to get the sniper to winning (following the state machine). Without first bidding, the winning snapshot will have a bid price of 0.
 
 [This](https://github.com/reub-the-cube/auction-sniper/tree/560858e478650bbd213c3ce8603712d1a47e53c0) is how the repository looks after this step.
+
+### Activity 15.4 - Follow Through
+
+I did these changes [in mirco steps on a branch](https://github.com/reub-the-cube/auction-sniper/commits/activity-15.4-follow-through/) before squashing and merging back to main. My implementation is pretty similar to the book. I kept a method on my `SniperSnapshot` class for setting the `SniperState` when the auction closes when I made the change on the branch. After merging, I added [an extension method](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods) which [makes the code a little more declarative](https://github.com/reub-the-cube/auction-sniper/blob/0aaf4bc363ca873fea12c9e3e59513e5bc18c102/AuctionSniper.Core/SniperSnapshot.cs#L5C74-L5C86).
+
+I think that all the behaviour of `SniperSnapshot` and `SniperState` is covered with the `AuctionSniper` unit tests. The final code from the authors does contain test classes for these two objects, which could help to flush out some edge cases.
+
+Coming back to the front-end, I am setting the value of the status text to the value of the enum (`BidStatus = sniperSnapshot.State.ToString()`) so don't need to bring across a mapping / create an array of status, which incidentally also need to be in the same order as the enums. I have broadly equivalent tests for the view model in the MAUI MVVM framework so can trust the data-binding is doing its job. 
+
+As the book takes a look at this, I feel that `MainPage.xaml` is doing too much Sniper orchestration. I create a `Portfolio` for the main page view model to bind to, which will take care of the code that fired when 'Join' is clicked. This looks a lot neater and will stand the view model in good stead for when multiple snipers are added. The 'portfolio' concept is also now a lot easier to test.

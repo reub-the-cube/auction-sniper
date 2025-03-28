@@ -1,4 +1,5 @@
-﻿using AuctionSniper.App.ViewModels;
+﻿using AuctionSniper.App.Interfaces;
+using AuctionSniper.App.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -37,7 +38,6 @@ namespace AuctionSniper.App
                 .AddTransient<XMPP.Client>()
                 .AddTransient<IPortfolio, Portfolio>();
                 
-
             return builder.Build();
         }
 
