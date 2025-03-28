@@ -11,12 +11,12 @@ namespace AuctionSniper.Core
         {
             if (isWinning)
             {
-                snapshot = new(snapshot.ItemId, snapshot.Price, snapshot.Bid, SniperState.Won);
+                snapshot = snapshot.AuctionClosed();
                 sniperListener.SniperSnapshotChanged(snapshot);
             }
             else
             {
-                snapshot = new(snapshot.ItemId, snapshot.Price, snapshot.Bid, SniperState.Lost);
+                snapshot = snapshot.AuctionClosed();
                 sniperListener.SniperSnapshotChanged(snapshot);
             }
         }
