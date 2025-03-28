@@ -72,10 +72,5 @@ namespace AuctionSniper.App.Models
         {
             BidStatus = "Lost";
         }
-
-        public void SniperWon()
-        {
-            BidStatus = "Won";
-        }
     }
 }

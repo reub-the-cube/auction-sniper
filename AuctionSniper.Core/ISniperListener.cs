@@ -5,7 +5,5 @@
         void SniperSnapshotChanged(SniperSnapshot sniperSnapshot);
 
         void SniperLost();
-
-        void SniperWon();
     }
 }
