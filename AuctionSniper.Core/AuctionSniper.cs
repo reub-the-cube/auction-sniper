@@ -4,24 +4,17 @@ namespace AuctionSniper.Core
 {
     public class AuctionSniper(Auction auction, ISniperListener sniperListener, string itemId) : IAuctionEventListener
     {
-        private bool isWinning = false;
         private SniperSnapshot snapshot = new(itemId, 0, 0, SniperState.Joining);
 
         public void AuctionClosed()
         {
-            if (isWinning)
-            {
-                sniperListener.SniperWon();
-            }
-            else
-            {
-                sniperListener.SniperLost();
-            }
+            snapshot = snapshot.AuctionClosed();
+            NotifyListenerOfChange();
         }
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
         {
-            isWinning = priceSource == AuctionEventEnums.PriceSource.FromSniper;
+            var isWinning = priceSource == AuctionEventEnums.PriceSource.FromSniper;
 
             if (isWinning)
             {
@@ -34,6 +27,11 @@ namespace AuctionSniper.Core
                 snapshot = snapshot.Bidding(price, bid);
             }
 
+            NotifyListenerOfChange();
+        }
+
+        private void NotifyListenerOfChange()
+        {
             sniperListener.SniperSnapshotChanged(snapshot);
         }
     }

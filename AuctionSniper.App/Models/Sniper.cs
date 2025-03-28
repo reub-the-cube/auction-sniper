@@ -67,15 +67,5 @@ namespace AuctionSniper.App.Models
             CurrentPrice = sniperSnapshot.Price;
             LastBid = sniperSnapshot.Bid;
         }
-
-        public void SniperLost()
-        {
-            BidStatus = "Lost";
-        }
-
-        public void SniperWon()
-        {
-            BidStatus = "Won";
-        }
     }
 }
