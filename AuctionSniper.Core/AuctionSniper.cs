@@ -16,7 +16,8 @@ namespace AuctionSniper.Core
             }
             else
             {
-                sniperListener.SniperLost();
+                snapshot = new(snapshot.ItemId, snapshot.Price, snapshot.Bid, SniperState.Lost);
+                sniperListener.SniperSnapshotChanged(snapshot);
             }
         }
 
