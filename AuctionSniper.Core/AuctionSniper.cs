@@ -11,7 +11,8 @@ namespace AuctionSniper.Core
         {
             if (isWinning)
             {
-                sniperListener.SniperWon();
+                snapshot = new(snapshot.ItemId, snapshot.Price, snapshot.Bid, SniperState.Won);
+                sniperListener.SniperSnapshotChanged(snapshot);
             }
             else
             {
