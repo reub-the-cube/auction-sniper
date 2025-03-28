@@ -9,7 +9,7 @@ namespace AuctionSniper.Core
         public void AuctionClosed()
         {
             snapshot = snapshot.AuctionClosed();
-            sniperListener.SniperSnapshotChanged(snapshot);
+            NotifyListenerOfChange();
         }
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
@@ -27,6 +27,11 @@ namespace AuctionSniper.Core
                 snapshot = snapshot.Bidding(price, bid);
             }
 
+            NotifyListenerOfChange();
+        }
+
+        private void NotifyListenerOfChange()
+        {
             sniperListener.SniperSnapshotChanged(snapshot);
         }
     }
