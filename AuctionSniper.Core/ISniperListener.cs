@@ -3,7 +3,5 @@
     public interface ISniperListener
     {
         void SniperSnapshotChanged(SniperSnapshot sniperSnapshot);
-
-        void SniperLost();
     }
 }
