@@ -4,7 +4,6 @@ namespace AuctionSniper.Core
 {
     public class AuctionSniper(Auction auction, ISniperListener sniperListener, string itemId) : IAuctionEventListener
     {
-        private bool isWinning = false;
         private SniperSnapshot snapshot = new(itemId, 0, 0, SniperState.Joining);
 
         public void AuctionClosed()
@@ -15,7 +14,7 @@ namespace AuctionSniper.Core
 
         public void CurrentPrice(int price, int increment, AuctionEventEnums.PriceSource priceSource)
         {
-            isWinning = priceSource == AuctionEventEnums.PriceSource.FromSniper;
+            var isWinning = priceSource == AuctionEventEnums.PriceSource.FromSniper;
 
             if (isWinning)
             {
